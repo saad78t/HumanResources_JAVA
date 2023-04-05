@@ -1,0 +1,346 @@
+package speciality;
+import java.io.*;
+
+import fi.jyu.mit.ohj2.Mjonot;
+import humanresourcesemployee.EmployNumberChecking.*;
+
+
+public class Speciality implements Cloneable{
+	
+  private int tunnusNro;
+  private int employeeNro;
+  private String ala;
+  private int aloitusvuosi;
+  private int tuntiaViikossa;
+	  
+  private static int seuraavaNro = 1;
+	 
+  
+    /**
+     * Alustetaan harrastus.  Toistaiseksi ei tarvitse tehdä mitään
+     */
+    public Speciality() {
+        // Vielä ei tarvita mitään
+    }
+
+        
+    /**
+     * Alustetaan tietyn jäsenen harrastus.  
+     * @param jasenNro jäsenen viitenumero 
+     */
+    public Speciality(int employeeNro) {
+        this.employeeNro = employeeNro;
+    }
+
+
+    /**
+      * @return harrastukse kenttien lukumäärä
+      */
+
+     public int getKenttia() {
+         return 5;
+     }
+ 
+ 
+     /**
+      * @return ensimmäinen käyttäjän syötettävän kentän indeksi
+      */
+ 
+     public int ekaKentta() {
+         return 2;
+     }
+
+    
+     /**
+       * @param k minkä kentän kysymys halutaan
+       * @return valitun kentän kysymysteksti
+       */
+      public String getKysymys(int k) {
+          switch (k) {
+              case 0:
+                  return "id";
+              case 1:
+                  return "employeeId";
+              case 2:
+                  return "ala";
+              case 3:
+                  return "aloitusvuosi";
+              case 4:
+                  return "h/vko";
+              default:
+                  return "???";
+          }
+      }
+
+     
+    /**
+        * Tehdään identtinen klooni jäsenestä
+        * @return Object kloonattu jäsen
+        * @example
+        * <pre name="test">
+        * #THROWS CloneNotSupportedException 
+        *   Harrastus har = new Harrastus();
+        *   har.parse("   2   |  10  |   Kalastus  | 1949 | 22 t ");
+        *   Harrastus kopio = har.clone();
+        *   kopio.toString() === har.toString();
+        *   har.parse("   1   |  11  |   Uinti  | 1949 | 22 t ");
+        *   kopio.toString().equals(har.toString()) === false;
+        * </pre>
+        */
+       @Override
+       public Speciality clone() throws CloneNotSupportedException { 
+           return (Speciality)super.clone();
+       }
+
+		/**
+		   * Apumetodi, jolla saadaan täytettyä testiarvot Harrastukselle.
+		   * Aloitusvuosi arvotaan, jotta kahdella harrastuksella ei olisi
+		   * samoja tietoja.
+		   * @param nro viite henkilöön, jonka harrastuksesta on kyse
+		   */
+		  public void vastaaPitsinNyplays(int nro) {
+		      employeeNro = nro;
+		      ala = "Pitsin nypläys";
+		      aloitusvuosi = rand(1900, 2000);
+		      tuntiaViikossa = rand(0, 60);
+		  }
+
+  
+		  public static int rand(int ala, int yla) {
+				double n =(yla-ala)*Math.random()+ala;
+				return (int)Math.round(n);
+			}
+
+
+       /**
+         * Tulostetaan harrastuksen tiedot
+         * @param out tietovirta johon tulostetaan
+         */
+        public void tulosta(PrintStream out) {
+            out.println(ala + " " + aloitusvuosi + " " + tuntiaViikossa);
+        }
+  
+        
+     /**
+       * Tulostetaan henkilön tiedot
+       * @param os tietovirta johon tulostetaan
+       */
+          public void tulosta(OutputStream os) {
+              tulosta(new PrintStream(os));
+          }
+          
+        
+       /**
+         * Antaa harrastukselle seuraavan rekisterinumeron.
+         * @return harrastuksen uusi tunnus_nro
+         * @example
+         * <pre name="test">
+         *   Harrastus pitsi1 = new Harrastus();
+         *   pitsi1.getTunnusNro() === 0;
+         *   pitsi1.rekisteroi();
+         *   Harrastus pitsi2 = new Harrastus();
+         *   pitsi2.rekisteroi();
+         *   int n1 = pitsi1.getTunnusNro();
+         *   int n2 = pitsi2.getTunnusNro();
+         *   n1 === n2-1;
+         * </pre>
+         */    
+    public int rekisteroi() {
+    	tunnusNro = seuraavaNro;
+        seuraavaNro++;
+        return tunnusNro;
+    }
+    
+    
+    /**
+      * Palautetaan mille jäsenelle harrastus kuuluu
+      * @return jäsenen id
+      */
+     public int getEmployeeNro() {
+         return employeeNro;
+     }
+     
+     
+     public int getTunnusNro() {
+         return tunnusNro;
+     }
+     
+     
+     /**
+      * Asettaa tunnusnumeron ja samalla varmistaa että
+      * seuraava numero on aina suurempi kuin tähän mennessä suurin.
+      * @param nr asetettava tunnusnumero
+      */
+     private void setTunnusNro(int nr) {
+         tunnusNro = nr;
+         if ( tunnusNro >= seuraavaNro ) seuraavaNro = tunnusNro + 1;
+     }
+
+     
+     public String getAla() {
+			return ala;
+		}
+
+
+		public String setAla(String Ala) {
+			ala = Ala;
+			return null;
+		}
+     
+     
+     /**
+          * Palauttaa harrastuksen tiedot merkkijonona jonka voi tallentaa tiedostoon.
+          * @return harrastus tolppaeroteltuna merkkijonona 
+          * @example
+          * <pre name="test">
+          *   Harrastus harrastus = new Harrastus();
+          *   harrastus.parse("   2   |  10  |   Kalastus  | 1949 | 22 t ");
+          *   harrastus.toString()    === "2|10|Kalastus|1949|22";
+          * </pre>
+          */
+         @Override
+         public String toString() {
+             StringBuffer sb = new StringBuffer("");
+             String erotin = "";
+             for (int k = 0; k < getKenttia(); k++) {
+                 sb.append(erotin);
+                 sb.append(anna(k));
+                 erotin = "|";
+             }
+             return sb.toString();
+          }
+     
+
+         /**
+           * @param k Minkä kentän sisältö halutaan
+           * @return valitun kentän sisältö
+           * @example
+           * <pre name="test">
+           *   Harrastus har = new Harrastus();
+           *   har.parse("   2   |  10  |   Kalastus  | 1949 | 22 t ");
+           *   har.anna(0) === "2";   
+           *   har.anna(1) === "10";   
+           *   har.anna(2) === "Kalastus";   
+           *   har.anna(3) === "1949";   
+           *   har.anna(4) === "22";   
+           *   
+           * </pre>
+           */
+          public String anna(int k) {
+              switch (k) {
+                  case 0:
+                      return "" + tunnusNro;
+                  case 1:
+                      return "" + employeeNro;
+                  case 2:
+                      return ala;
+                  case 3:
+                      return "" + aloitusvuosi;
+                  case 4:
+                      return "" + tuntiaViikossa;
+                  default:
+                      return "???";
+              }
+          }
+
+          
+          /**
+            * Asetetaan valitun kentän sisältö.  Mikäli asettaminen onnistuu,
+            * palautetaan null, muutoin virheteksti.
+            * @param k minkä kentän sisältö asetetaan
+            * @param s asetettava sisältö merkkijonona
+            * @return null jos ok, muuten virheteksti
+            * @example
+            * <pre name="test">
+            *   Harrastus har = new Harrastus();
+            *   har.aseta(3,"kissa") === "aloitusvuosi: Ei kokonaisluku (kissa)";
+            *   har.aseta(3,"1940")  === null;
+            *   har.aseta(4,"kissa") === "h/vko: Ei kokonaisluku (kissa)";
+            *   har.aseta(4,"20")    === null;
+            * </pre>
+            */
+           public String aseta(int k, String s) {
+               String st = s.trim();
+               StringBuffer sb = new StringBuffer(st);
+               switch (k) {
+                   case 0:
+                       setTunnusNro(Mjonot.erota(sb, '$', getTunnusNro()));
+                       return null;
+                   case 1:
+                       employeeNro = Mjonot.erota(sb, '$', employeeNro);
+                       return null;
+                   case 2:
+                       ala = st;
+                       return null;
+                   case 3:
+                       try {
+                           aloitusvuosi = Mjonot.erotaEx(sb, '§', aloitusvuosi);
+                       } catch (NumberFormatException ex) {
+                           return "aloitusvuosi: Ei kokonaisluku ("+st+")";
+                       }
+                       return null;
+       
+                   case 4:
+                       try {
+                           tuntiaViikossa = Mjonot.erotaEx(sb, '§', tuntiaViikossa);
+                       } catch (NumberFormatException ex) {
+                           return "h/vko: Ei kokonaisluku ("+st+")";
+                       }
+                       return null;
+       
+                   default:
+                       return "Väärä kentän indeksi";
+               }
+           }
+       
+
+          
+     /**
+         * Selvitää harrastuksen tiedot | erotellusta merkkijonosta.
+         * Pitää huolen että seuraavaNro on suurempi kuin tuleva tunnusnro.
+         * @param rivi josta harrastuksen tiedot otetaan
+         * @example
+         * <pre name="test">
+         *   Harrastus harrastus = new Harrastus();
+         *   harrastus.parse("   2   |  10  |   Kalastus  | 1949 | 22 t ");
+         *   harrastus.getJasenNro() === 10;
+         *   harrastus.toString()    === "2|10|Kalastus|1949|22";
+         *   
+         *   harrastus.rekisteroi();
+         *   int n = harrastus.getTunnusNro();
+         *   harrastus.parse(""+(n+20));
+         *   harrastus.rekisteroi();
+         *   harrastus.getTunnusNro() === n+20+1;
+         *   harrastus.toString()     === "" + (n+20+1) + "|10||1949|22";
+         * </pre>
+         */
+        public void parse(String rivi) {
+            StringBuffer sb = new StringBuffer(rivi);
+            for (int k = 0; k < getKenttia(); k++)
+                aseta(k, Mjonot.erota(sb, '|'));
+        }
+
+        @Override
+            public boolean equals(Object obj) {
+                if ( obj == null ) return false;
+                return this.toString().equals(obj.toString());
+            }
+            
+        
+            @Override
+            public int hashCode() {
+                return employeeNro;
+            }
+        
+    
+     /**
+           * Testiohjelma Harrastukselle.
+           * @param args ei käytössä
+           */
+          public static void main(String[] args) {
+             Speciality spe = new Speciality();
+              spe.vastaaPitsinNyplays(2);
+              spe.tulosta(System.out);
+          }
+
+}

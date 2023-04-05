@@ -1,0 +1,21 @@
+package HumanResources;
+
+import fi.jyu.mit.fxgui.ModalController;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+
+/**
+ * @author Saad Turky
+ * @version 28.4.2019
+ *
+ */
+public class AboutGUIController {
+	 @FXML private Label labelVirhe;
+	 
+	   @FXML void handleDefaultOK() {
+		   ModalController.closeStage(labelVirhe);
+	    }
+
+
+}

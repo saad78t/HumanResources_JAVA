@@ -1,0 +1,111 @@
+package speciality;
+import java.io.*;
+import humanresourcesemployee.EmployNumberChecking.*;
+public class Speciality {
+	
+//  private int tunnusNro;
+  private int employeeNro;
+  private String ala;
+  private int aloitusvuosi;
+  private int tuntiaViikossa;
+	  
+  private static int seuraavaNro = 1;
+	 
+  
+    /**
+     * Alustetaan harrastus.  Toistaiseksi ei tarvitse tehdä mitään
+     */
+    public Speciality() {
+        // Vielä ei tarvita mitään
+    }
+
+        
+    /**
+     * Alustetaan tietyn jäsenen harrastus.  
+     * @param jasenNro jäsenen viitenumero 
+     */
+    public Speciality(int employeeNro) {
+        this.employeeNro = employeeNro;
+    }
+
+	        
+/**
+   * Apumetodi, jolla saadaan täytettyä testiarvot Harrastukselle.
+   * Aloitusvuosi arvotaan, jotta kahdella harrastuksella ei olisi
+   * samoja tietoja.
+   * @param nro viite henkilöön, jonka harrastuksesta on kyse
+   */
+  public void vastaaPitsinNyplays(int nro) {
+      employeeNro = nro;
+      ala = "Pitsin nypläys";
+      aloitusvuosi = rand(1900, 2000);
+      tuntiaViikossa = rand(0, 60);
+  }
+
+  
+  public static int rand(int ala, int yla) {
+		double n =(yla-ala)*Math.random()+ala;
+		return (int)Math.round(n);
+	}
+
+
+/**
+         * Tulostetaan harrastuksen tiedot
+         * @param out tietovirta johon tulostetaan
+         */
+        public void tulosta(PrintStream out) {
+            out.println(ala + " " + aloitusvuosi + " " + tuntiaViikossa);
+        }
+  
+        
+     /**
+       * Tulostetaan henkilön tiedot
+       * @param os tietovirta johon tulostetaan
+       */
+          public void tulosta(OutputStream os) {
+              tulosta(new PrintStream(os));
+          }
+          
+        
+       /**
+         * Antaa harrastukselle seuraavan rekisterinumeron.
+         * @return harrastuksen uusi tunnus_nro
+         * @example
+         * <pre name="test">
+         *   Harrastus pitsi1 = new Harrastus();
+         *   pitsi1.getTunnusNro() === 0;
+         *   pitsi1.rekisteroi();
+         *   Harrastus pitsi2 = new Harrastus();
+         *   pitsi2.rekisteroi();
+         *   int n1 = pitsi1.getTunnusNro();
+         *   int n2 = pitsi2.getTunnusNro();
+         *   n1 === n2-1;
+         * </pre>
+         */    
+    public int rekisteroi() {
+    	employeeNro = seuraavaNro;
+        seuraavaNro++;
+        return employeeNro;
+    }
+
+
+    /**
+      * Palautetaan mille jäsenelle harrastus kuuluu
+      * @return jäsenen id
+      */
+     public int getEmployeeNro() {
+         return employeeNro;
+     }
+     
+
+     /**
+           * Testiohjelma Harrastukselle.
+           * @param args ei käytössä
+           */
+          public static void main(String[] args) {
+             Speciality spe = new Speciality();
+              spe.vastaaPitsinNyplays(2);
+              spe.tulosta(System.out);
+          }
+
+}

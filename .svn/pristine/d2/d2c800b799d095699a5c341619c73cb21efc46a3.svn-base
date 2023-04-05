@@ -1,0 +1,212 @@
+package HumanResources;
+import java.io.PrintStream;
+import fi.jyu.mit.fxgui.ListChooser;
+import fi.jyu.mit.fxgui.ModalController;
+import fi.jyu.mit.fxgui.TextAreaOutputStream;
+import humanresourcesemployee.Employee;
+import humanresourcesemployee.HumanResources;
+import humanresourcesemployee.SailoException;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import fi.jyu.mit.fxgui.*;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.text.Font;
+//import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
+/**
+ * @author Omistaja
+ * @version 28.1.2019
+ *
+ */
+public class MainWindowGUIController implements Initializable {
+	/**
+     * K‰sitell‰‰n uuden j‰senen lis‰‰minen
+     */
+
+	  @Override
+	    public void initialize(URL url, ResourceBundle bundle) {
+	        alusta();      
+	    }
+
+   
+
+		@FXML private ScrollPane panelEmployee;
+		@FXML private ListChooser<Employee> chooserEmployees;
+	 
+	   @FXML void handleSearch() {
+		   Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");
+	    }
+	
+	
+    @FXML private void handleNew() {
+	try {	
+    	humanresources.newEmployee();
+    	Employee emp= humanresources.newEmployee();
+    	hae(emp.getEmployeeNumber());
+	}catch (RuntimeException e) {System.err.println();}
+    }
+    
+    public void setHumanResources(HumanResources hr) {
+    	this.humanresources=hr;
+    	
+    }
+    
+  
+    /**
+     * K‰sitell‰‰n tallennusk‰sky
+     */
+    @FXML private void handleSave() {
+        tallenna();
+    }
+    
+    
+    @FXML void handleDelete() {
+    	  Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");
+    }
+
+    
+    @FXML   void handleEdit() {
+    	  Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");
+    }
+
+    
+    /**
+     * K‰sitell‰‰n lopetusk‰sky
+     */
+    @FXML private void handleExit() {
+        tallenna();
+        Platform.exit();
+    }
+    
+    
+    @FXML void handleFirst() {
+    	 Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");
+    }
+
+    
+    
+    @FXML void handleLast() {
+    	 Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");
+    }
+
+    
+    @FXML void handleBack() {
+    	 Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");
+    }
+    
+
+    @FXML void handleNext() {
+    	Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");
+    }
+
+    
+    /**
+     * Tarkistetaan onko tallennus tehty
+     * @return true jos saa sulkaa sovelluksen, false jos ei
+     */
+    public boolean voikoSulkea() {
+        tallenna();
+        return true;
+    }
+    
+    /**
+     * Tietojen tallennus
+     */
+    private void tallenna() {
+        Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi viel‰");
+    }
+
+    
+    @FXML private void handleSalaries() {
+    	  try {
+    		  FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SalariesGUIView.fxml"));
+    		  Parent root1 = (Parent) fxmlLoader.load();
+    		  Stage stage = new Stage();
+    		  stage.setTitle("Salaries");
+    		  stage.setScene(new Scene(root1));  
+    		  stage.show();
+
+          } catch(Exception e) {
+             System.out.println("Can not load Window ");
+          }
+     }
+    
+    
+    @FXML private void handleContracts() {
+    	 try {
+   		  FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ContractsGUIView.fxml"));
+   		  Parent root1 = (Parent) fxmlLoader.load();
+   		  Stage stage = new Stage();
+   		  stage.setTitle("Contracts");
+   		  stage.setScene(new Scene(root1));  
+   		  stage.show();
+
+         } catch(Exception e) {
+            System.out.println("Can not load Window ");
+         }
+}
+    
+  //===========================================================================================    
+ // T‰st‰ eteenp‰in ei k‰yttˆliittym‰‰n suoraan liittyv‰‰ koodia    
+    
+    private HumanResources humanresources;
+    private TextArea areaEmployee = new TextArea();
+    private Employee employeeKohdalla;
+    
+    
+    /**
+     * Tekee tarvittavat muut alustukset, nyt vaihdetaan GridPanen tilalle
+     * yksi iso tekstikentt‰, johon voidaan tulostaa j‰senten tiedot.
+     * Alustetaan myˆs j‰senlistan kuuntelija 
+     */
+    private void alusta() {
+        panelEmployee.setContent(areaEmployee);
+        areaEmployee.setFont(new Font("Courier New", 12));
+        panelEmployee.setFitToHeight(true);
+        
+        chooserEmployees.clear();
+        chooserEmployees.addSelectionListener(e -> naytaJasen());
+    }
+    
+    
+    /**
+     * N‰ytt‰‰ listasta valitun j‰senen tiedot, tilap‰isesti yhteen isoon edit-kentt‰‰n
+     */  
+    private void naytaJasen() {
+    	employeeKohdalla = chooserEmployees.getSelectedObject();
+
+        if (employeeKohdalla == null) return;
+
+        areaEmployee.setText("");
+        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaEmployee)) {
+        	employeeKohdalla.tulosta(os);
+        }
+    }
+    
+     
+    
+    /**
+     * Hakee j‰senten tiedot listaan
+     * @param jnro j‰senen numero, joka aktivoidaan haun j‰lkeen
+     */
+    protected void hae(int enro) {
+        chooserEmployees.clear();
+        int index = 0;
+        for (int i = 0; i <= humanresources.getEmployees(); i++) {
+            Employee employee = humanresources.annaEmployee(i);
+            if (employee.getEmployeeNumber() == enro) index = i;
+            chooserEmployees.add(employee.getName(), employee);
+        }
+        chooserEmployees.setSelectedIndex(index); // t‰st‰ tulee muutosviesti joka n‰ytt‰‰ j‰senen
+    }
+
+}

@@ -1,0 +1,55 @@
+package HumanResources;
+import fi.jyu.mit.fxgui.*;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+
+
+
+
+/**
+ * @author Omistaja
+ * @version 28.1.2019
+ *
+ */
+public class MainWindowGUIController {
+	/**
+     * K‰sitell‰‰n uuden j‰senen lis‰‰minen
+     */
+    @FXML private void handleNew() {
+        Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");
+    }
+    
+    
+    /**
+     * K‰sitell‰‰n tallennusk‰sky
+     */
+    @FXML private void handleSave() {
+        tallenna();
+    }
+    
+    
+    /**
+     * K‰sitell‰‰n lopetusk‰sky
+     */
+    @FXML private void handleExit() {
+        tallenna();
+        Platform.exit();
+    }
+    /**
+     * Tarkistetaan onko tallennus tehty
+     * @return true jos saa sulkaa sovelluksen, false jos ei
+     */
+    public boolean voikoSulkea() {
+        tallenna();
+        return true;
+    }
+    
+    /**
+     * Tietojen tallennus
+     */
+    private void tallenna() {
+        Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi viel‰");
+    }
+
+
+}

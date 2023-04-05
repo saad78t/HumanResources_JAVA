@@ -1,0 +1,214 @@
+package HumanResources;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import fi.jyu.mit.fxgui.Dialogs;
+import fi.jyu.mit.fxgui.ModalController;
+import fi.jyu.mit.fxgui.ModalControllerInterface;
+import fi.jyu.mit.ohj2.Mjonot;
+import humanresourcesemployee.Employee;
+import humanresourcessalaries.Salary;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+/**
+ * @author Omistaja
+ * @version 25.4.2019
+ *
+ */
+public class SalaryDialogeController  implements ModalControllerInterface<Salary>,Initializable {
+	 
+	   @FXML private ScrollPane panelSalary;    
+	   @FXML private GridPane   gridSalary;
+	   @FXML private TextField editEmployeeNumber;
+	   @FXML private TextField editContractNumber;
+	   @FXML private TextField editMainsalary;
+       @FXML private TextField editMOnth;   
+	   @FXML private TextField editYear;
+	   @FXML private TextField editBounce;
+	   @FXML private TextField editLoans;
+	   @FXML private TextField editTransallwance;
+	   @FXML private TextField editNetSalary;
+       @FXML private Label     labelVirhe;
+       
+	   
+	    @FXML void keyReleased() {
+          count();
+	    }
+
+
+       @Override
+       public void initialize(URL url, ResourceBundle bundle) {
+  		 alusta();
+  }
+    
+  	 
+  	  @FXML  void handleCancel() {
+  		  salaryKohdalla = null;
+  		  ModalController.closeStage(labelVirhe);
+  	    }
+
+  	  
+  	  @FXML  void handleOk() {
+  		  if ( salaryKohdalla == null ) {
+  			           naytaVirhe("Nimi ei saa olla tyhjä");
+  		           return;
+  			        }
+  			      ModalController.closeStage(labelVirhe);
+  		    }
+   
+  	// ========================================================    
+      private Salary salaryKohdalla;
+      private TextField edits[];
+      private static Salary apusalary = new Salary(); // Jäsen jolta voidaan kysellä tietoja.
+      private static int kentta = 0;
+   
+      
+      public static TextField[] luoKentat(GridPane gridSalary) {
+    	  gridSalary.getChildren().clear();
+          TextField[] edits = new TextField[apusalary.getKenttia()];
+          
+          for (int i=0, k = apusalary.ekaKentta(); k < apusalary.getKenttia(); k++, i++) {
+              Label label = new Label(apusalary.getKysymys(k));
+              gridSalary.add(label, 0, i);
+              TextField edit = new TextField();
+              // edit.setOnKeyReleased((e) -> count());
+              edits[k] = edit;
+              edit.setId("e"+k);
+              gridSalary.add(edit, 1, i);
+          }
+          return edits;
+      }
+      
+      
+      public static void tyhjenna(TextField[] edits) {
+          for (TextField edit: edits) 
+              if ( edit != null ) edit.setText(""); 
+      }
+
+      
+      public static int getFieldId(Object obj, int oletus) {
+          if ( !( obj instanceof Node)) return oletus;
+          Node node = (Node)obj;
+          return Mjonot.erotaInt(node.getId().substring(1),oletus);
+      }
+      
+      
+      protected void alusta() {
+	        edits = luoKentat(gridSalary);
+	        for(TextField edit: edits) {
+	        	if ( edit != null ) 
+	        	edit.setOnKeyReleased(e -> kasitteleMuutosSalaried((TextField)(e.getSource())));
+//	        	panelSalary.setFitToHeight(true);	        
+	 }
+	        
+//	        editEmployeeNumber = edits[];   
+//	        editContractNumber= edits1]; 
+	        editMainsalary=edits[2];     
+//	        editMOnth =edits[];          
+//	        editYear =edits[];           
+	        editBounce=edits[5];         
+	        editLoans=edits[6];          
+	        editTransallwance=edits[7];  
+	        editNetSalary=edits[8];  
+	        
+	    }
+      
+      
+     //
+      public void setDefault(Salary oletus) {
+          salaryKohdalla = oletus;
+          naytaSalary(edits, salaryKohdalla);
+      }
+  
+	          
+      @Override
+      public Salary getResult() {
+          return salaryKohdalla;
+      }
+      
+      @Override
+      public void handleShown() {
+    	  kentta = Math.max(apusalary.ekaKentta(), Math.min(kentta, apusalary.getKenttia()-1));
+          edits[kentta].requestFocus();
+      }
+
+     
+      private void naytaVirhe(String virhe) {
+    	          if ( virhe == null || virhe.isEmpty() ) {
+    	              labelVirhe.setText("");
+    	              labelVirhe.getStyleClass().removeAll("virhe");
+    	              return;
+    	          }
+    	          labelVirhe.setText(virhe);
+    	          labelVirhe.getStyleClass().add("virhe");
+    	      }
+
+      
+      protected void kasitteleMuutosSalaried(TextField editt) {
+          if (salaryKohdalla == null) return;
+          int k = getFieldId(editt,apusalary.ekaKentta());
+          String s = editt.getText();
+          String virhe = null;
+          virhe = salaryKohdalla.aseta(k,s); 
+          if (virhe == null) {
+              Dialogs.setToolTipText(editt,"");
+              editt.getStyleClass().removeAll("virhe");
+             naytaVirhe(virhe);
+         } else {
+             Dialogs.setToolTipText(editt,virhe);
+             editt.getStyleClass().add("virhe");
+             naytaVirhe(virhe);
+          }
+          count();
+   }
+      
+      
+      public static void naytaSalary(TextField[] edits, Salary salary) {
+          if (salary == null) return;
+          
+          for (int k = salary.ekaKentta(); k < salary.getKenttia(); k++) {
+              edits[k].setText(salary.anna(k));
+          }
+      }       
+          
+      
+      public void naytaSalary(Salary salary) {
+    	  naytaSalary(edits,salary );       
+     }
+      
+      
+      public static Salary kysySalary(Stage modalityStage, Salary oletus, int k) {
+          return ModalController.showModal(
+                      SalaryDialogeController.class.getResource("SalaryDialogeView.fxml"),
+                      "Edit",
+                         modalityStage, oletus, 
+                         ctrl -> setKentta(kentta)
+                      );
+          }
+
+
+ 	private static void setKentta(int kenttaa) {
+ 	    	  kentta=kenttaa;
+ }
+ 	
+    /*
+     * to calculate employer's salary
+     */
+    private void count() {
+    	double mainsalary = Double.parseDouble(editMainsalary.getText());
+    	double bounce = Double.parseDouble(editBounce.getText());
+    	double loance = Double.parseDouble(editLoans.getText());
+    	double transallwance = Double.parseDouble(editTransallwance.getText()); 
+    	double result =(mainsalary + bounce - loance + transallwance);
+        editNetSalary.setText(String.valueOf(result));
+        salaryKohdalla.aseta(8, String.valueOf(result));
+    }
+}

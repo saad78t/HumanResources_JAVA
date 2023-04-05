@@ -1,0 +1,654 @@
+package HumanResources;
+
+
+//import humanresourcesemployee.HumanResources;
+import humanresourcesemployee.*;
+
+import java.util.Collection;
+import java.util.List; 
+import java.io.PrintStream;
+import java.net.URL;
+import java.util.ResourceBundle;
+import fi.jyu.mit.fxgui.*;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.text.Font;
+import speciality.Speciality;
+//import javafx.scene.control.TextArea;
+//import javafx.scene.layout.Pane;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
+
+/**
+ * @author Omistaja
+ * @version 28.1.2019
+ *
+ */
+public class MainWindowGUIController implements ModalControllerInterface<HumanResources>, Initializable {
+	
+	/**
+     * K‰sitell‰‰n uuden j‰senen lis‰‰minen
+     */
+
+	  @Override
+	    public void initialize(URL url, ResourceBundle bundle) {
+	        alusta();      
+	    }
+
+	     @FXML private TextField editEmployeeNumber;
+	     @FXML private TextField editName; 
+		 @FXML private TextField editPostalCode;	    
+		 @FXML private TextField editPostalAddress;	    
+		 @FXML private TextField editHourRealization;
+	     @FXML private TextField editSalary;
+	     @FXML private TextField editSurName;
+	     @FXML private TextField editNationality;  
+	     @FXML private TextField editDateofBirth;   
+	     @FXML private TextField editPhoneNumber;
+	     @FXML private TextField editSpeciality;   
+	     @FXML private TextField editAddress;
+	     @FXML private Label labelVirhe;
+	     @FXML private Label labelVirhe1; //for the search
+	     @FXML private ScrollPane panelEmployee;
+         @FXML private ListChooser<Employee> chooserEmployees;
+	     @FXML private ListChooser<Speciality> chooserSPeciality;
+		 @FXML private StringGrid<Speciality> tableSpeciality;
+		 @FXML private GridPane gridEmployee;
+		 
+				 
+		    @FXML void handleAbout() {
+		    	ModalController.showModal(SalariesGUIController.class.getResource("AboutView.fxml"), "About", null, humanresources);
+		    }
+		   
+		 
+		  @FXML private TextField hakuehto;
+		  @FXML private ComboBoxChooser<String> cbKentat;
+		    
+		  
+		  @FXML  void handleDeletespeciality() {
+                deleteSpeciality();
+		    }
+
+		  
+		   @FXML void handleHakuehto() {
+//			   if ( employeeKohdalla != null )
+//		            hae(employeeKohdalla.getEmployeeNumber()); 
+			   hae(0);
+		    }
+
+		   
+	  @FXML void handleSPeciality() {
+		 newSpeciality();
+	    }
+	  
+	   
+	   @FXML void handleEditSpeciality() {
+	     editSpeciality();
+	    }
+
+		
+	   @FXML void handleSearch() {
+//		   Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");
+	    }	
+	
+	   
+    @FXML private void handleNew() { // inside new method newEmployee()
+    
+    	newEmployee();
+    	
+//	try {	
+////    	humanresources.newEmployee(); //this instruction causes adding two objects
+//    	Employee emp= humanresources.newEmployee();
+//    	hae(emp.getEmployeeNumber());
+//	}catch (RuntimeException e) {System.err.println();}	
+}
+    
+    
+    public void setHumanResources(HumanResources hr) {
+    	this.humanresources=hr;   	
+    }
+    
+  
+    /**
+     * K‰sitell‰‰n tallennusk‰sky
+     */
+    @FXML private void handleSave() {
+        tallenna();
+    }
+    
+    
+    @FXML void handleDelete() {
+//    	  Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");
+    	deleteEmployee();
+    }
+
+    
+    @FXML void handleEdit() {
+    	  //Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");    
+    	edit(1);    	
+    }
+
+    
+    /**
+     * K‰sitell‰‰n lopetusk‰sky
+     */
+    @FXML private void handleExit() {
+        tallenna();
+        Platform.exit();
+    }
+    
+    
+    @FXML void handleFirst() {
+//    	 Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");
+    	int n =0;
+    	n=chooserEmployees.getSelectedIndex();  
+    	n =0;
+    	chooserEmployees.setSelectedIndex(n);
+    }
+   
+   
+    @FXML void handleLast() {
+//    	 Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");   	
+    	int n =0;    	
+    	n=humanresources.getEmployees()-1;
+    	chooserEmployees.setSelectedIndex(n);
+    }
+
+    
+    @FXML void handleBack() {
+    	int n =0;
+    	n=chooserEmployees.getSelectedIndex();
+    	n--;
+    	if (n<0) Dialogs.showMessageDialog("You are already in the first object");
+    	chooserEmployees.setSelectedIndex(n);
+    }
+    
+
+    @FXML void handleNext() {
+//  	Dialogs.showMessageDialog("Ei osata viel‰ lis‰t‰");	
+    	int n =0;
+    	n=chooserEmployees.getSelectedIndex();
+    	n++;
+    	chooserEmployees.setSelectedIndex(n);
+    }
+
+       
+    /**
+     * Tarkistetaan onko tallennus tehty
+     * @return true jos saa sulkaa sovelluksen, false jos ei
+     */
+    public boolean voikoSulkea() {
+        tallenna();
+        return true;
+    }
+    
+//    private void naytaInformaition(Employee employee) {
+//    	editName.setText(employee.getName());
+//    }
+    
+    
+    private void naytaSpecialities(Employee employee) {
+           tableSpeciality.clear();
+           if ( employee == null ) return;
+           
+           List<Speciality> specialities = humanresources.annaSpecialities(employee);
+		   if ( specialities.size() == 0 ) return;
+		   for (Speciality spe: specialities)
+		       naytaSpeciality(spe); 
+       }
+   
+       
+       private void naytaSpeciality(Speciality spe) {
+           int kenttia = spe.getKenttia(); 
+           String[] rivi = new String[kenttia-spe.ekaKentta()]; 
+           for (int i=0, k=spe.ekaKentta(); k < kenttia; i++, k++) 
+               rivi[i] = spe.anna(k); 
+          tableSpeciality.add(spe,rivi);
+       }
+       
+      
+//       /**
+//        * Tekee uuden tyhj‰n harrastuksen editointia varten
+//        */
+//       private void uusiHarrastus() {
+//           if ( jasenKohdalla == null ) return;
+//           try {
+//               Harrastus uusi = new Harrastus(jasenKohdalla.getTunnusNro());
+//               uusi = TietueDialogController.kysyTietue(null, uusi, 0);
+//               if ( uusi == null ) return;
+//               uusi.rekisteroi();
+//               kerho.lisaa(uusi);
+//               naytaHarrastukset(jasenKohdalla); 
+//              tableSpeciality.selectRow(1000);  // j‰rjestet‰‰n viimeinen rivi valituksi
+//           } catch (SailoException e) {
+//               Dialogs.showMessageDialog("Lis‰‰minen ep‰onnistui: " + e.getMessage());
+//           }
+//       }
+    
+    
+       private void  editSpeciality() {
+           int r = tableSpeciality.getRowNr();
+           if ( r < 0 ) return; // klikattu ehk‰ otsikkorivi‰
+           Speciality spe = tableSpeciality.getObject();
+           if ( spe == null ) return;
+           int k = tableSpeciality.getColumnNr()+spe.ekaKentta();
+           try {
+               spe = SpecialityDialogeController.kysySpeciality(null, spe.clone(), k);
+               if ( spe == null ) return;
+               humanresources.korvaaTaiLisaa(spe); 
+               naytaSpecialities(employeeKohdalla);            
+               tableSpeciality.selectRow(r);  // j‰rjestet‰‰n sama rivi takaisin valituksi
+           } catch (CloneNotSupportedException  e) { /* clone on tehty */  
+           } catch (SailoException e) {
+               Dialogs.showMessageDialog("Ongelmia lis‰‰misess‰: " + e.getMessage());
+           }
+       }     
+              
+       
+    private void edit(int k){
+    	 if ( employeeKohdalla == null ) return; 
+    	 try {
+        Employee employee = EmployeeDialogeController.kysyEmployee(null,employeeKohdalla.clone(),k); 
+        if ( employee == null ) return; 
+        humanresources.korvaaTaiLisaa(employee); 
+        hae(employee.getEmployeeNumber());
+    	 } catch (CloneNotSupportedException e) { 
+    		            // 
+         } catch (SailoException e) { 
+    	 Dialogs.showMessageDialog(e.getMessage()); 
+    		 } 
+//   		EmployeeDialogeController.kysyEmployee(null,employeeKohdalla); 
+   }       	     
+   
+     
+    /**
+     * Tietojen tallennus
+     */
+    private String tallenna() {
+    	 try {
+             humanresources.tallenna();
+             return null;
+         } catch (SailoException ex) {
+             Dialogs.showMessageDialog("Tallennuksessa ongelmia! " + ex.getMessage());
+             return ex.getMessage();
+         }  
+    }
+
+    
+    @FXML private void handleSalaries() {
+    	ModalController.showModal(SalariesGUIController.class.getResource("SalariesGUIView.fxml"), "Salary", null, humanresources);
+    	/*
+    	  try {
+    		  FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SalariesGUIView.fxml"));
+    		  Parent root1 = (Parent) fxmlLoader.load();
+    		  Stage stage = new Stage();
+    		  stage.setTitle("Salaries");
+    		  stage.setScene(new Scene(root1));  
+    		  stage.show();
+
+          } catch(Exception e) {
+             System.out.println("Can not load Window ");
+          }
+          */
+     }
+    
+    
+    @FXML private void handleContracts() {
+    	// TODO: change this code into ModalController.showModal(...); https://www.mit.jyu.fi/demowww/ohj2/ht19/vesal/vaihe5/
+    	
+    	ModalController.showModal(ContractsGUIController.class.getResource("ContractsGUIView.fxml"), "Contract", null, humanresources);
+    	
+    	/*
+    	 try {
+   		  FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ContractsGUIView.fxml"));
+   		  Parent root1 = (Parent) fxmlLoader.load();
+   		  Stage stage = new Stage();
+   		  stage.setTitle("Contracts");
+   		  stage.setScene(new Scene(root1));  
+   		  stage.show();
+   		  
+          final ContractsGUIController contractsCtrl = (ContractsGUIController) fxmlLoader.getController();
+   		  contractsCtrl.setHumanResources(humanresources);
+
+         } catch(Exception e) {
+            System.out.println("Can not load Window ");
+         }
+         */
+}
+    
+  //===========================================================================================    
+ // T‰st‰ eteenp‰in ei k‰yttˆliittym‰‰n suoraan liittyv‰‰ koodia    
+    
+    private HumanResources humanresources;
+//    private TextArea areaEmployee = new TextArea();
+    private Employee employeeKohdalla;
+    private TextField[] edits;
+    private static Speciality apuspeciality = new Speciality(); 
+    private static Employee apuemployee = new Employee();
+    private int kentta = 0; 
+    /**
+     * Kysyt‰‰n tiedoston nimi ja luetaan se
+     * @return true jos onnistui, false jos ei
+     */
+     public boolean avaa() {
+         // uusinimi = KerhonNimiController.kysyNimi(null, kerhonnimi);
+       // if (uusinimi == null) return false;
+          lueTiedosto("nimet.dat");
+           return true;
+        }
+   
+     
+     /**
+      * Luo uuden j‰senen jota aletaan editoimaan 
+      */
+         protected void newEmployee() {           
+                Employee uusi = new Employee();
+                uusi = EmployeeDialogeController.kysyEmployee(null, uusi,1);    
+                if ( uusi == null ) return;
+                uusi.rekisteroi();
+              try {   
+                humanresources.lisaa(uusi);              
+             } catch (SailoException e) {
+                 Dialogs.showMessageDialog("It is not allowed to add more " + e.getMessage());
+                 return;
+             }
+               hae(uusi.getEmployeeNumber());
+         }
+
+    
+  public void newSpeciality() {
+	  
+//	  if ( employeeKohdalla == null ) return;
+//	        try {
+//	            Speciality uusi = new Speciality(employeeKohdalla.getEmployeeNumber());
+//	            uusi = EmployeeDialogeController.kysyEmployee(null, uusi, 0);
+//	            if ( uusi == null ) return;
+//	            uusi.rekisteroi();
+//	            humanresources.lisaa(uusi);
+//	            naytaSpeciality(employeeKohdalla); 
+//	           tableSpeciality.selectRow(1000);  // j‰rjestet‰‰n viimeinen rivi valituksi
+//	        } catch (SailoException e) {
+//	            Dialogs.showMessageDialog("Lis‰‰minen ep‰onnistui: " + e.getMessage());
+//	        }
+//	    }
+  
+	  
+	 if ( employeeKohdalla == null ) return;
+//	 Speciality spe = humanresources.luoSpeciality(employeeKohdalla);
+     Speciality spe = new Speciality();  
+     spe.rekisteroi();  
+     spe.vastaaPitsinNyplays(employeeKohdalla.getEmployeeNumber());  
+     humanresources.lisaa(spe);  
+     hae(employeeKohdalla.getEmployeeNumber());          	 
+  }
+  
+  
+  /**
+     * Tulostaa j‰senen tiedot
+     * @param os tietovirta johon tulostetaan
+     * @param jasen tulostettava j‰sen
+     */
+    public void tulosta(PrintStream os, final Employee employee) {
+        os.println("----------------------------------------------");
+        employee.tulosta(os);
+        os.println("----------------------------------------------");
+        List<Speciality> specialities = humanresources.annaSpecialities(employee);   
+        for (Speciality spe:specialities)
+            spe.tulosta(os);  
+    }
+
+    
+    /**
+     * Tulostaa listassa olevat j‰senet tekstialueeseen
+     * @param text alue johon tulostetaan
+     */
+    public void tulostaValitut(TextArea text) {
+        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(text)) {
+            os.println("Tulostetaan kaikki employees");
+            for (int i = 0; i < humanresources.getEmployees(); i++) {
+            	Employee employee = humanresources.annaEmployee(i);
+                tulosta(os, employee);
+                os.println("\n\n");
+            }
+        }
+    }
+
+    
+    /**
+     * Tekee tarvittavat muut alustukset, nyt vaihdetaan GridPanen tilalle
+     * yksi iso tekstikentt‰, johon voidaan tulostaa j‰senten tiedot.
+     * Alustetaan myˆs j‰senlistan kuuntelija 
+     */
+    private void alusta() {    	
+//        panelEmployee.setContent(areaEmployee);
+//        areaEmployee.setFont(new Font("Courier New", 12));
+//        panelEmployee.setFitToHeight(true);
+    	
+    	cbKentat.clear();
+    	 for (int k = apuemployee.ekaKentta(); k < apuemployee.getKenttia(); k++) 
+    	 cbKentat.add(apuemployee.getKysymys(k), null); 
+    	 cbKentat.getSelectionModel().select(0); 
+   	
+        chooserEmployees.clear();
+        chooserEmployees.addSelectionListener(e -> naytaJasen());
+        
+       edits = EmployeeDialogeController.luoKentat(gridEmployee);
+        for (TextField edit: edits)  
+            if ( edit != null ) {  
+                edit.setEditable(false);  
+                edit.setOnMouseClicked(e -> { if ( e.getClickCount() > 1 ) edit(EmployeeDialogeController.getFieldId(e.getSource(),0)); });  
+                edit.focusedProperty().addListener((a,o,n) -> kentta = EmployeeDialogeController.getFieldId(edit,kentta));  
+            }    
+        
+        System.out.println("-------specialities----------");
+        
+     // alustetaan harrastustaulukon otsikot 
+             int eka = apuspeciality.ekaKentta(); 
+             int lkm = apuspeciality.getKenttia(); 
+             String[] headings = new String[lkm-eka]; 
+             for (int i=0, k=eka; k<lkm; i++, k++) headings[i] = apuspeciality.getKysymys(k); 
+             tableSpeciality.initTable(headings); 
+             tableSpeciality.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); 
+             tableSpeciality.setEditable(false); 
+             tableSpeciality.setPlaceholder(new Label("Ei viel‰ specialities"));           
+             
+             // T‰m‰ on viel‰ huono, ei automaattisesti muutu jos kentti‰ muutetaan. 
+            tableSpeciality.setColumnSortOrderNumber(1); 
+            tableSpeciality.setColumnSortOrderNumber(2); 
+            tableSpeciality.setColumnWidth(1, 60); 
+            tableSpeciality.setColumnWidth(2, 60); 
+             
+            tableSpeciality.setOnMouseClicked( e -> { if ( e.getClickCount() > 1 ) editSpeciality(); } );
+            tableSpeciality.setOnKeyPressed( e -> {if ( e.getCode() == KeyCode.F2 ) editSpeciality();}); 
+}    
+    
+  
+    private void naytaVirhe(String virhe) {
+        if ( virhe == null || virhe.isEmpty() ) {
+            labelVirhe1.setText("");
+            labelVirhe1.getStyleClass().removeAll("virhe");
+            return;
+        }
+        labelVirhe1.setText(virhe);
+        labelVirhe1.getStyleClass().add("virhe");
+    }
+    
+    
+    private void setTitle(String title) {
+        ModalController.getStage(hakuehto).setTitle(title);
+    }
+    
+    
+    /**
+     * N‰ytt‰‰ listasta valitun j‰senen tiedot, tilap‰isesti yhteen isoon edit-kentt‰‰n
+     */  
+    private void naytaJasen() {
+    	employeeKohdalla = chooserEmployees.getSelectedObject();
+    	haeSpeciality(0);
+    	naytaSpecialities(employeeKohdalla);
+//    	naytaInformaition(employeeKohdalla);
+       if (employeeKohdalla == null) return;{    	    
+       }
+
+       
+      EmployeeDialogeController.naytaEmployee(edits, employeeKohdalla);
+      
+
+//       areaEmployee.setText("");
+//      try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaEmployee)) {
+//        	employeeKohdalla.tulosta(os);
+//       }
+    }
+    
+        
+    /**
+     * Hakee j‰senten tiedot listaan
+     * @param jnro j‰senen numero, joka aktivoidaan haun j‰lkeen
+     */
+    protected void hae(final int enr) {
+    	int enro = enr; // jnro j‰senen numero, joka aktivoidaan haun j‰lkeen
+    	 if ( enro <= 0 ) { 
+               Employee kohdalla = employeeKohdalla; 
+               if ( kohdalla != null ) enro = kohdalla.getEmployeeNumber(); 
+          }
+
+    	 int k = cbKentat.getSelectionModel().getSelectedIndex()+ apuemployee.ekaKentta();;
+         String ehto = hakuehto.getText(); 
+         if (ehto.indexOf('*') < 0) ehto = "*" + ehto + "*"; 
+
+         chooserEmployees.clear();
+              int index = 0;
+            
+    	 // Collection<Employee> employees;
+    	  var employees = humanresources.etsi(ehto, k);
+          int i = 0;
+          if (employees.isEmpty() ) 
+              naytaVirhe(String.format("Ei osata hakea (kentt‰: %d, ehto: %s)", k, ehto));
+          else 
+        	  naytaVirhe(null);
+          for (Employee employee:employees) {
+              if (employee.getEmployeeNumber() == enro) index = i;
+              chooserEmployees.add(employee.getName(), employee);
+              i++;
+          }
+    
+         chooserEmployees.setSelectedIndex(index); // t‰st‰ tulee muutosviesti joka n‰ytt‰‰ j‰senen
+          
+      
+
+         
+         //the old code
+//        chooserEmployees.clear();
+//        int index = 0;
+//        
+//        for (int i = 0; i < humanresources.getEmployees(); i++) {
+//            Employee employee = humanresources.annaEmployee(i);
+//            if (employee.getEmployeeNumber() == enro) index = i;
+//            chooserEmployees.add(employee.getName(), employee);
+//        }
+//        chooserEmployees.setSelectedIndex(index); // t‰st‰ tulee muutosviesti joka n‰ytt‰‰ j‰senen
+    }
+
+       
+    /**
+     * Hakee j‰senten tiedot listaan
+     * @param jnro j‰senen numero, joka aktivoidaan haun j‰lkeen
+     */
+    protected void haeSpeciality(int enro) {
+    	
+    	tableSpeciality.clear();
+        int index = 0;
+        
+         List   <Speciality> speciality = humanresources.annaSpecialities(employeeKohdalla);
+         for (Speciality spe:  speciality) 
+//            if (employee.getEmployeeNumber() == enro) index = i;
+        	 tableSpeciality.add(spe);
+      
+     //    tableSpeciality.setSelectedIndex(enro); // t‰st‰ tulee muutosviesti joka n‰ytt‰‰ j‰senen
+    }
+    
+    
+    /**
+     * Alustaa kerhon lukemalla sen valitun nimisest‰ tiedostosta
+     * @param nimi tiedosto josta kerhon tiedot luetaan
+     * @return null jos onnistuu, muuten virhe tekstin‰
+     */
+    protected String lueTiedosto(String nimi) {
+        //kerhonnimi = nimi;
+       // setTitle("Kerho - " + kerhonnimi);
+        try {
+            humanresources.lueTiedostosta(nimi);
+            hae(0);
+            return null;
+        } catch (SailoException e) {
+            hae(0);
+            String virhe = e.getMessage(); 
+            if ( virhe != null )
+            	Dialogs.showMessageDialog(virhe);
+            return virhe;
+        }
+     }
+   
+    
+    /*
+     * Poistetaan listalta valittu j‰sen
+     */
+    private void deleteEmployee() {
+        Employee employee = employeeKohdalla;
+        if ( employee == null ) return;
+        if ( !Dialogs.showQuestionDialog("Poisto", "Poistetaanko j‰sen: " + employee.getName(), "Kyll‰", "Ei") )
+            return;
+        humanresources.poista(employee);
+        int index = chooserEmployees.getSelectedIndex();
+        hae(0);
+        chooserEmployees.setSelectedIndex(index);
+    }
+
+    
+    /**
+       * Poistetaan harrastustaulukosta valitulla kohdalla oleva harrastus. 
+       */
+      private void deleteSpeciality() {
+          int rivi = tableSpeciality.getRowNr();
+          if ( rivi < 0 ) return;
+         Speciality speciality = tableSpeciality.getObject();
+          if ( speciality == null ) return;
+          humanresources.poistaHarrastus(speciality);
+          naytaSpecialities(employeeKohdalla);
+          int harrastuksia = tableSpeciality.getItems().size(); 
+          if ( rivi >= harrastuksia ) rivi = harrastuksia -1;
+          tableSpeciality.getFocusModel().focus(rivi);
+          tableSpeciality.getSelectionModel().select(rivi);
+      }
+
+
+    
+    
+    @Override
+	public HumanResources getResult() {
+		// TODO Auto-generated method stub
+		return humanresources;
+	}
+
+
+	@Override
+	public void handleShown() {
+		hae(0);		
+	}
+
+
+	@Override
+	public void setDefault(HumanResources hr) {
+		this.humanresources = hr;
+//		naytaJasen();
+	}
+}

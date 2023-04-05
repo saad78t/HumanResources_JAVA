@@ -1,0 +1,456 @@
+package humanhesourcescontract;
+import static humanresourcesemployee.EmployNumberChecking.*;
+
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.Comparator;
+
+import fi.jyu.mit.ohj2.Mjonot;
+import humanresourcesemployee.Employee;
+
+public class Contract implements Cloneable{
+	
+	private static int seuraavaNro    = 1;
+	
+    private int        ContractNumber ; // contract ID
+    private int        EmployeeNumber ;
+    private int        AnnualHolidays ;
+    private String     DateOfStarting = "";
+    private String     DateOfExpiry   = "";
+    private int        DailyHours ;
+    private int        AdditionalTime ;
+    private String     ContractPeriod = "";
+    
+    
+    /** 
+     * Jäsenten vertailija 
+     */ 
+    public static class Vertailija implements Comparator<Contract> { 
+        private int k;  
+         
+        @SuppressWarnings("javadoc") 
+        public Vertailija(int k) { 
+            this.k = k; 
+        } 
+         
+        @Override 
+        public int compare(Contract contract1, Contract contract2) { 
+            return contract1.getAvain(k).compareToIgnoreCase(contract2.getAvain(k)); 
+//       	 return employee1.FirstName.compareToIgnoreCase(employee2.FirstName);
+        } 
+    } 
+   
+    
+    /** 
+     * Antaa k:n kentän sisällön merkkijonona 
+     * @param k monenenko kentän sisältö palautetaan 
+     * @return kentän sisältö merkkijonona 
+     */ 
+    public String getAvain(int k) { 
+        switch ( k ) { 
+        case 0: return "" + ContractNumber ;
+        case 1: return "" + EmployeeNumber ;
+        case 2: return "" + AnnualHolidays ;
+        case 3: return "" + DateOfStarting ;
+        case 4: return "" + DateOfExpiry   ;   
+        case 5: return "" + DailyHours ;      
+        case 6: return "" + AdditionalTime ;  
+        case 7: return "" + ContractPeriod ;      
+       default: return "Äääliö"; 
+        } 
+    } 
+    
+    
+    public Contract() {
+    	 //
+    }
+ 
+    
+	/**       
+      * Palauttaa jäsenen kenttien lukumäärän       
+      * @return kenttien lukumäärä       
+      */    
+     public int getKenttia() {       
+         return 8;    
+        }
+     
+     
+     /**        
+       * Eka kenttä joka on mielekäs kysyttäväksi     
+       * @return eknn kentän indeksi 
+      */ 
+    public int ekaKentta() { 
+         return 0; 
+   } 
+    
+    
+    /** 
+     * Antaa k:n kentän sisällön merkkijonona 
+     * @param k monenenko kentän sisältö palautetaan 
+     * @return kentän sisältö merkkijonona 
+     */ 
+      public String anna(int k) { 
+         switch ( k ) { 
+         case 0: return "" + ContractNumber; 
+         case 1: return "" + EmployeeNumber; 
+         case 2: return "" + AnnualHolidays; 
+         case 3: return "" + DateOfStarting; 
+         case 4: return "" + DateOfExpiry; 
+         case 5: return "" + DailyHours; 
+         case 6: return "" + AdditionalTime; 
+         case 7: return "" + ContractPeriod; 
+         
+          default: return "Äääliö"; 
+   
+          }       
+ } 
+         
+    
+    /** 
+   * Asettaa k:n kentän arvoksi parametrina tuodun merkkijonon arvon 
+      * @param k kuinka monennen kentän arvo asetetaan 
+      * @param jono jonoa joka asetetaan kentän arvoksi 
+      * @return null jos asettaminen onnistuu, muuten vastaava virheilmoitus. 
+     * @example 
+      * <pre name="test"> 
+     *   Jasen jasen = new Jasen(); 
+      *   jasen.aseta(1,"Ankka Aku") === null; 
+     *   jasen.aseta(2,"kissa") =R= "Hetu liian lyhyt" 
+     *   jasen.aseta(2,"030201-1111") === "Tarkistusmerkin kuuluisi olla C";  
+      *   jasen.aseta(2,"030201-111C") === null;  
+      *   jasen.aseta(9,"kissa") === "Liittymisvuosi väärin jono = \"kissa\""; 
+      *   jasen.aseta(9,"1940") === null; 
+     * </pre> 
+     */ 
+     public String aseta(int k, String jono) { 
+        String tjono = jono.trim(); 
+        StringBuffer sb = new StringBuffer(tjono);         
+        switch ( k ) { 
+        case 0: 
+             setContractNumber(Mjonot.erota(sb, '§', getContractNumber())); 
+            return null; 
+        case 1: 
+        	EmployeeNumber =Integer.valueOf(tjono);
+             return null; 
+       case 2: 
+    	   AnnualHolidays=Integer.valueOf( tjono) ;    	   
+            return null; 
+        case 3:                                             
+        	DateOfStarting = tjono;                         
+           return null;                                     
+       case 4:                                              
+    	   DateOfExpiry = tjono;                            
+             return null;                                   
+        case 5:                                             
+        	DailyHours =Integer.valueOf(tjono);             
+            return null; 
+       case 6: 
+    	   AdditionalTime =Integer.valueOf(tjono); 
+             return null; 
+        case 7: 
+        	ContractPeriod = tjono; 
+            return null; 
+        default: 
+         return "ÄÄliö"; 
+         }    
+        } 
+    
+    
+    /**         
+     * Palauttaa k:tta jäsenen kenttää vastaavan kysymyksen         
+     * @param k kuinka monennen kentän kysymys palautetaan (0-alkuinen)         
+     * @return k:netta kenttää vastaava kysymys       
+     */        
+    public String getKysymys(int k) { 
+       switch ( k ) {                                 
+       case 0: return "ContractNumber";               
+       case 1: return "EmployeeNumber";               
+       case 2: return "AnnualHolidays";               
+       case 3: return "DateOfStarting";               
+       case 4: return "DateOfExpiry";                 
+       case 5: return "DailyHours";                   
+       case 6: return "AdditionalTime";               
+       case 7: return "ContractPeriod";                      
+       default: return "";   
+        } 
+ } 
+   
+    
+    public static void main(String[] args) {
+		Contract aku= new Contract();
+		Contract aku2= new Contract();
+		
+		aku.rekisteroi();
+		aku2.rekisteroi();
+		
+		aku.tulosta(System.out);
+		aku2.tulosta(System.out);
+		
+		aku.vastaaAkuAnkka();
+		aku2.vastaaAkuAnkka();
+		aku.tulosta(System.out);
+		aku2.tulosta(System.out);
+	}
+    
+    
+    /**
+     * Antaa jäsenelle seuraavan rekisterinumeron.
+     * @return jäsenen uusi tunnusNro
+     * @example
+     * <pre name="test">
+     *   Employee aku1 = new Employee();
+     *   aku1.getTunnusNro() === 0;
+     *   aku1.rekisteroi();
+     *   aku1.rekisteroi();
+     *   aku1.rekisteroi();
+     *   Employee aku2 = new Employee();
+     *   aku2.rekisteroi();
+     *   aku2.rekisteroi();
+     *   int n1 = aku1.getTunnusNro();
+     *   int n2 = aku2.getTunnusNro();
+     *   n1 === n2-1;
+     * </pre>
+     */
+	 public int rekisteroi() { // this one handles contract ID
+		 if (EmployeeNumber!=0) return EmployeeNumber;
+		 ContractNumber = seuraavaNro;
+	        seuraavaNro++;
+	        return ContractNumber;
+	    }
+	 
+	 
+	 public int getEmployeeNumber() {
+	        return EmployeeNumber;
+	    }
+	 
+
+		public String getEmployeeNumbers() {
+			return Integer.toString(EmployeeNumber);			
+		}
+		
+	 public void tulosta(PrintStream out) {
+	        out.println(String.format("%03d", EmployeeNumber, 3) + "  " + EmployeeNumber + "  "
+	                + ContractNumber+" "+  AnnualHolidays+" "+ DateOfStarting);
+	        out.println("  " + DateOfExpiry + "  " + DailyHours + " " + AdditionalTime + " "+ ContractPeriod);
+	 }
+	        
+	        //why we need this method
+	   	 public void tulosta(OutputStream os) {
+	   	        tulosta(new PrintStream(os));
+	   	    }
+	   	 
+	   	 
+	   	public void vastaaAkuAnkka(int ContractNumber) {
+            EmployeeNumber = rand(1000,9999) ;
+            ContractNumber      = rand(1000,9999) ;
+            AnnualHolidays      = 20;
+            DateOfStarting      ="1.7.2019";
+            DateOfExpiry        = "1.6.2020";
+            DailyHours          = 8;
+            AdditionalTime      = 10;
+            ContractPeriod      = "One year";
+}
+
+
+	   	public void setContractNumber(int c) {
+			ContractNumber=c;
+		}
+	   	
+	   	
+		public int getContractNumber() {
+			return ContractNumber;
+		}
+		
+		
+		public String getContractNumbers() {
+			return Integer.toString(ContractNumber);
+			
+		}
+		
+				
+		public int getAnnualHolidays() {
+			return AnnualHolidays;
+		}
+
+
+		public String setAnnualHolidays(int annualHolidays) {
+			AnnualHolidays = annualHolidays;
+			return null;
+		}
+
+
+		public String getDateOfStarting() {
+			return DateOfStarting;
+		}
+
+
+		public String setDateOfStarting(String dateOfStarting) {
+			DateOfStarting = dateOfStarting;
+			return null;
+		}
+
+
+		public String getContractPeriod() {
+			return ContractPeriod;
+		}
+
+
+		public String setContractPeriod(String contractPeriod) {
+			ContractPeriod = contractPeriod;
+			return null;
+		}
+		
+
+		public String getDateOfExpiry() {
+			return DateOfExpiry;
+		}
+
+
+		public String setDateOfExpiry(String dateOfExpiry) {
+			DateOfExpiry = dateOfExpiry;
+			return null;
+		}
+
+
+		public void vastaaAkuAnkka() {
+			 int ContractNumber = arvoHetu();
+		    vastaaAkuAnkka(ContractNumber);
+		   }
+		
+		
+		/**
+	     * Palauttaa jäsenen tiedot merkkijonona jonka voi tallentaa tiedostoon.
+	     * @return jäsen tolppaeroteltuna merkkijonona 
+	     * @example
+	     * <pre name="test">
+	     *   Jasen jasen = new Jasen();
+	     *   jasen.parse("   3  |  Ankka Aku   | 030201-111C");
+	     *   jasen.toString().startsWith("3|Ankka Aku|030201-111C|") === true; // on enemmäkin kuin 3 kenttää, siksi loppu |
+	     * </pre>  
+	     */
+	    @Override
+	    public String toString() {
+	    	 StringBuffer sb = new StringBuffer("");
+	         String erotin = "";
+	         for (int k = 0; k < getKenttia(); k++) {
+	             sb.append(erotin);
+	             sb.append(anna(k));
+	             erotin = "|";
+	         }
+	         return sb.toString();
+	         
+	         //the old code
+//	        return "" +
+//	                getContractNumber() + "|" +
+//	                //ContractNumber + "|" +
+//	                EmployeeNumber + "|" +
+//	                AnnualHolidays + "|" +
+//	                DateOfStarting + "|" +
+//	                DateOfExpiry + "|" +
+//	                DailyHours + "|" +
+//	                AdditionalTime   + "|" +
+//	                ContractPeriod + "|" ;	                 	              
+	    }
+	    
+	    
+	    /**
+	     * Selvitää jäsenen tiedot | erotellusta merkkijonosta
+	     * Pitää huolen että seuraavaNro on suurempi kuin tuleva tunnusNro.
+	     * @param rivi josta jäsenen tiedot otetaan
+	     * 
+	     * @example
+	     * <pre name="test">
+	     *   Jasen jasen = new Jasen();
+	     *   jasen.parse("   3  |  Ankka Aku   | 030201-111C");
+	     *   jasen.getTunnusNro() === 3;
+	     *   jasen.toString().startsWith("3|Ankka Aku|030201-111C|") === true; // on enemmäkin kuin 3 kenttää, siksi loppu |
+	     *
+	     *   jasen.rekisteroi();
+	     *   int n = jasen.getTunnusNro();
+	     *   jasen.parse(""+(n+20));       // Otetaan merkkijonosta vain tunnusnumero
+	     *   jasen.rekisteroi();           // ja tarkistetaan että seuraavalla kertaa tulee yhtä isompi
+	     *   jasen.getTunnusNro() === n+20+1;   
+	     * </pre>
+	     */
+	    public void parse(String rivi) {	    	
+	    	StringBuffer sb = new StringBuffer(rivi);
+	          for (int k = 0; k < getKenttia(); k++)
+	              aseta(k, Mjonot.erota(sb, '|'));
+	          
+	          //the old code
+//	        StringBuffer sb = new StringBuffer(rivi);
+//	        setContractNumber(Mjonot.erota(sb, '|', getContractNumber()));
+//	        EmployeeNumber = Mjonot.erota(sb, '|', EmployeeNumber);
+//	        AnnualHolidays = Mjonot.erota(sb, '|', AnnualHolidays);
+//	        DateOfStarting = Mjonot.erota(sb, '|',  DateOfStarting);
+//	        DateOfExpiry = Mjonot.erota(sb, '|',  DateOfExpiry);
+//	        DailyHours = Mjonot.erota(sb, '|', DailyHours);
+//	        AdditionalTime = Mjonot.erota(sb, '|', AdditionalTime);
+	        //Address = Mjonot.erota(sb, '|', Address);        
+	    }
+	    
+	    
+	    /**
+	     * Tutkii onko jäsenen tiedot samat kuin parametrina tuodun jäsenen tiedot
+	     * @param jasen jäsen johon verrataan
+	     * @return true jos kaikki tiedot samat, false muuten
+	     * @example
+	     * <pre name="test">
+	     *   Jasen jasen1 = new Jasen();
+	     *   jasen1.parse("   3  |  Ankka Aku   | 030201-111C");
+	     *   Jasen jasen2 = new Jasen();
+	     *   jasen2.parse("   3  |  Ankka Aku   | 030201-111C");
+	     *   Jasen jasen3 = new Jasen();
+	     *   jasen3.parse("   3  |  Ankka Aku   | 030201-115H");
+	     *   
+	     *   jasen1.equals(jasen2) === true;
+	     *   jasen2.equals(jasen1) === true;
+	     *   jasen1.equals(jasen3) === false;
+	     *   jasen3.equals(jasen2) === false;
+	     * </pre>
+	     */
+	    public boolean equals(Contract contract) {
+	    	  if ( contract == null ) return false;
+	          for (int k = 0; k < getKenttia(); k++)
+	              if ( !anna(k).equals(contract.anna(k)) ) return false;
+	          return true;
+	    	//the old code
+//	        if ( employee == null ) return false;
+//	        return this.toString().equals(employee.toString());
+	    }
+	    
+	    @Override
+	    public boolean equals(Object contract) {
+	        if ( contract == null ) return false;
+	        return this.toString().equals(contract.toString());
+//	    	if ( contract instanceof Contract ) return equals((Contract)contract);
+//        return false;
+	    }
+
+
+	    @Override
+	    public int hashCode() {
+	        return ContractNumber;
+	    }
+	    
+	    
+	    /**
+	          * Tehdään identtinen klooni jäsenestä
+	          * @return Object kloonattu jäsen
+	          * @example
+	          * <pre name="test">
+	          * #THROWS CloneNotSupportedException 
+	          *   Jasen jasen = new Jasen();
+	          *   jasen.parse("   3  |  Ankka Aku   | 123");
+	          *   Jasen kopio = jasen.clone();
+	          *   kopio.toString() === jasen.toString();
+	          *   jasen.parse("   4  |  Ankka Tupu   | 123");
+	          *   kopio.toString().equals(jasen.toString()) === false;
+	          * </pre>
+	          */
+	         @Override
+	         public Contract clone() throws CloneNotSupportedException {
+	             Contract New = (Contract) super.clone();
+	             return New;
+	         } 
+}

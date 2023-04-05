@@ -1,0 +1,10 @@
+package HumanResources;
+
+/**
+ * @author Omistaja
+ * @version 9.2.2019
+ *
+ */
+public class LoginPageGUIController {
+      // TODO
+}

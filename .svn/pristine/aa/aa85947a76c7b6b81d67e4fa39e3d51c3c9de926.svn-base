@@ -1,0 +1,42 @@
+package HumanResources;
+import javafx.scene.layout.Pane;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.fxml.FXMLLoader;
+
+
+/**
+ * @author Omistaja
+ * @version 28.1.2019
+ *
+ */
+public class MainWindowMain extends Application {
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            FXMLLoader ldr = new FXMLLoader(getClass().getResource("MainWindowGUIView.fxml")); // korjaa tiedostonimi
+            final Pane root = (Pane)ldr.load();
+            final MainWindowGUIController kerhoCtrl = (MainWindowGUIController)ldr.getController(); // korjaa nimet
+            
+            final Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("MainWindow.css").toExternalForm()); // korjaa tiedostonimi
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("HumanResources"); // korjaa title
+            
+             Platform.setImplicitExit(false); // jos tämän laittaa, pitää itse sulkea
+            
+            primaryStage.setOnCloseRequest((event) -> {
+                // Kutsutaan voikoSulkea-metodia
+                if ( !kerhoCtrl.voikoSulkea() ) event.consume(); // korjaa nimi
+            });
+            
+            primaryStage.show();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+}

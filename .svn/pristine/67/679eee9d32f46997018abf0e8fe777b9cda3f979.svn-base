@@ -1,0 +1,108 @@
+package humanhesourcescontract;
+import static humanresourcesemployee.EmployNumberChecking.*;
+
+import java.io.OutputStream;
+import java.io.PrintStream;
+
+public class Contract {
+	
+	private static int seuraavaNro    = 1;
+	
+    private int        ContractNumber ; // contract ID
+    private int        EmployeeNumber ;
+    private int        AnnualHolidays ;
+    private String     DateOfStarting = "";
+    private String     DateOfExpiry   = "";
+    private int        DailyHours ;
+    private int        AdditionalTime ;
+    private String     ContractPeriod = "";
+    
+    
+    public static void main(String[] args) {
+		Contract aku= new Contract();
+		Contract aku2= new Contract();
+		
+		aku.rekisteroi();
+		aku2.rekisteroi();
+		
+		aku.tulosta(System.out);
+		aku2.tulosta(System.out);
+		
+		aku.vastaaAkuAnkka();
+		aku2.vastaaAkuAnkka();
+		aku.tulosta(System.out);
+		aku2.tulosta(System.out);
+	}
+    
+    
+    /**
+     * Antaa jäsenelle seuraavan rekisterinumeron.
+     * @return jäsenen uusi tunnusNro
+     * @example
+     * <pre name="test">
+     *   Employee aku1 = new Employee();
+     *   aku1.getTunnusNro() === 0;
+     *   aku1.rekisteroi();
+     *   aku1.rekisteroi();
+     *   aku1.rekisteroi();
+     *   Employee aku2 = new Employee();
+     *   aku2.rekisteroi();
+     *   aku2.rekisteroi();
+     *   int n1 = aku1.getTunnusNro();
+     *   int n2 = aku2.getTunnusNro();
+     *   n1 === n2-1;
+     * </pre>
+     */
+	 public int rekisteroi() { // this one handles contract ID
+		 if (EmployeeNumber!=0) return EmployeeNumber;
+		 ContractNumber = seuraavaNro;
+	        seuraavaNro++;
+	        return ContractNumber;
+	    }
+	 
+	 
+	 public int getEmployeeNumber() {
+	        return EmployeeNumber;
+	    }
+	 
+	 
+	 public void tulosta(PrintStream out) {
+	        out.println(String.format("%03d", EmployeeNumber, 3) + "  " + EmployeeNumber + "  "
+	                + ContractNumber+" "+  AnnualHolidays+" "+ DateOfStarting);
+	        out.println("  " + DateOfExpiry + "  " + DailyHours + " " + AdditionalTime + " "+ ContractPeriod);
+	 }
+	        
+	        //why we need this method
+	   	 public void tulosta(OutputStream os) {
+	   	        tulosta(new PrintStream(os));
+	   	    }
+	   	 
+	   	 
+	   	public void vastaaAkuAnkka(int ContractNumber) {
+            EmployeeNumber = 0 + rand(1000,9999);
+            ContractNumber      = rand(1000,9999) ;
+            AnnualHolidays      = 20;
+            DateOfStarting      ="1.7.2019";
+            DateOfExpiry        = "1.6.2020";
+            DailyHours          = 8;
+            AdditionalTime      = 10;
+            ContractPeriod      = "One year";
+}
+
+
+		public int getContractNumber() {
+			return ContractNumber;
+		}
+		
+		
+		public String getContractNumbers() {
+			return Integer.toString(ContractNumber);
+			
+		}
+		
+		
+		public void vastaaAkuAnkka() {
+			 int ContractNumber = arvoHetu();
+		    vastaaAkuAnkka(ContractNumber);
+		   }
+}

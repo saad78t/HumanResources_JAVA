@@ -1,0 +1,15 @@
+images/main window.png
+
+images/error.png
+
+images/MainWindow.png = the main window
+
+images/Salaries.png = the salaries window
+
+images/Contracts.png = the contracts window
+
+file/ContractsGUIView.fxml
+
+file/MainWindowGUIView.fxml
+
+file/SalariesGUIView.fxml

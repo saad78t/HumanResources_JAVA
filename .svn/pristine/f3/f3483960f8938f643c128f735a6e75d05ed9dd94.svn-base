@@ -1,0 +1,324 @@
+package humanresourcesemployee;
+
+import java.io.File;
+import java.util.*;
+import fi.jyu.mit.fxgui.Dialogs;
+import humanhesourcescontract.Contract;
+import humanhesourcescontract.Contracts;
+import humanresourcessalaries.Salaries;
+import humanresourcessalaries.Salary;
+import speciality.Specialities;
+import speciality.Speciality;
+
+public class HumanResources {
+	
+private Employees employees = new Employees();
+private Contracts contracts= new Contracts();
+private Salaries salaries = new Salaries();
+private Specialities specialities = new Specialities(); 
+
+
+     /**
+       * Poistaa jäsenistöstä ja harrasteista jäsenen tiedot 
+       * @param jasen jäsen jokapoistetaan
+       * @return montako jäsentä poistettiin
+       * @example
+       * <pre name="test">
+       * #THROWS Exception
+       *   alustaKerho();
+       *   kerho.etsi("*",0).size() === 2;
+       *   kerho.annaHarrastukset(aku1).size() === 2;
+       *   kerho.poista(aku1) === 1;
+       *   kerho.etsi("*",0).size() === 1;
+       *   kerho.annaHarrastukset(aku1).size() === 0;
+       *   kerho.annaHarrastukset(aku2).size() === 3;
+       * </pre>
+       */
+      public int poista(Employee employee) {
+          if ( employee == null ) return 0;
+          int ret = employees.poista(employee.getEmployeeNumber()); 
+          specialities.poistaJasenenHarrastukset(employee.getEmployeeNumber()); 
+          return ret; 
+      }
+
+      
+      public int poista1(Contract contract) {
+          if ( contract == null ) return 0;
+          int ret = contracts.poista1(contract.getEmployeeNumber());         
+          return ret; 
+      }
+
+
+      public int poista2(Salary salary) {
+          if ( salary == null ) return 0;
+          int ret = salaries.poista2(salary.getEmployeeNumber());         
+          return ret; 
+      }
+      
+      /** 
+        * Poistaa tämän harrastuksen 
+        * @param harrastus poistettava harrastus 
+        * @example
+        * <pre name="test">
+        * #THROWS Exception
+        *   alustaKerho();
+        *   kerho.annaHarrastukset(aku1).size() === 2;
+        *   kerho.poistaHarrastus(pitsi11);
+        *   kerho.annaHarrastukset(aku1).size() === 1;
+        */ 
+       public void poistaHarrastus(Speciality speciality) { 
+           specialities.poista(speciality); 
+       } 
+
+
+    //to show the number of employees
+	public int getEmployees() {
+        return employees.getLkm();
+    }
+	
+	
+	public int getContracts() {
+        return contracts.getLkm();
+	}
+	
+	
+	public int getSalaries() {
+		return salaries.getLkm();
+	}
+	
+	
+	public int getSpecialities() {
+        return specialities.getLkm();
+	}
+	
+	
+	//return employees number
+	public Employee annaEmployee(int i) throws IndexOutOfBoundsException {
+	        return employees.anna(i);
+	}
+	 
+	 
+	public Contract annaContract(int i) throws IndexOutOfBoundsException {
+        return contracts.anna(i);
+}
+	
+	
+	public Salary annaSalary(int i) throws IndexOutOfBoundsException {
+        return salaries.anna(i);
+}
+	
+	
+	
+ public List<Speciality> annaSpecialities(Employee employee) {
+	          return specialities.annaSpecialities(employee.getEmployeeNumber());
+	 }
+
+	 
+	  public void lisaa(Employee employee) throws SailoException {
+	        employees.lisaa(employee);
+	 }
+	  
+	  
+	  public void lisaa(Contract contract) throws SailoException {
+	        contracts.lisaa(contract);
+	 }
+	  
+	  
+	  public void lisaa(Salary salary) throws SailoException {
+	        salaries.lisaa(salary);
+	 }
+	
+	
+	  
+	  public void lisaa(Speciality spe) {
+		  specialities.lisaa(spe);
+     }
+	  
+	
+    /** 
+      * Palauttaa "taulukossa" hakuehtoon vastaavien jäsenten viitteet 
+      * @param hakuehto hakuehto  
+      * @param k etsittävän kentän indeksi  
+      * @return tietorakenteen löytyneistä jäsenistä 
+      * @throws SailoException Jos jotakin menee väärin
+      * @example 
+      * <pre name="test">
+      *   #THROWS CloneNotSupportedException, SailoException
+      *   alustaKerho();
+      *   Jasen jasen3 = new Jasen(); jasen3.rekisteroi();
+      *   jasen3.aseta(1,"Susi Sepe");
+      *   kerho.lisaa(jasen3);
+      *   Collection<Jasen> loytyneet = kerho.etsi("*Susi*",1);
+      *   loytyneet.size() === 1;
+      *   Iterator<Jasen> it = loytyneet.iterator();
+      *   it.next() == jasen3 === true; 
+      * </pre>
+      */ 
+     public Collection<Employee> etsi (String hakuehto, int k){ 
+         return employees.etsi(hakuehto, k); 
+     } 
+     
+     
+     public Collection<Contract> etsiContract (String hakuehto, int k){ 
+         return contracts.etsi(hakuehto, k); 
+     } 
+     
+          
+     public Collection<Salary> etsiSalary (String hakuehto, int k){ 
+         return salaries.etsi(hakuehto, k); 
+     } 
+     
+     
+	  public void korvaaTaiLisaa(Employee employee) throws SailoException {
+		  employees.korvaaTaiLisaa(employee);
+	  }
+	  
+	  
+	  public void korvaaTaiLisaa(Contract contract) throws SailoException {
+		  contracts.korvaaTaiLisaa(contract);
+	  }
+	  
+	  
+	  public void korvaaTaiLisaa(Salary salary) throws SailoException {
+		  salaries.korvaaTaiLisaa(salary);
+	  }
+	  
+	  
+	  public void korvaaTaiLisaa(Speciality speciality) throws SailoException {
+		  specialities.korvaaTaiLisaa(speciality);
+	  }
+	  
+	  
+	  public void tallenna() throws SailoException { 
+		          String virhe = ""; 
+	    try { 
+		              employees.tallenna(); 
+		              contracts.tallenna(); 
+		              salaries.tallenna();
+		              specialities.tallenna();
+          } catch ( SailoException ex ) {
+              virhe = ex.getMessage(); 
+
+          } 		   
+		         // try { 
+		              ///harrastukset.tallenna(); 
+		         // } catch ( SailoException ex ) { 
+		           //   virhe += ex.getMessage(); 
+		        //  } 
+		          if ( !"".equals(virhe) ) throw new SailoException(virhe); 
+	  }
+	  	  	  
+	  
+	  public void lueTiedostosta(String nimi) throws SailoException { 
+	        //employees.lueTiedostosta(nimi); 
+	        //harrastukset.lueTiedostosta(nimi); 
+	  
+	  		employees = new Employees(); // jos luetaan olemassa olevaan niin helpoin tyhjentää näin 
+	  		contracts = new Contracts();
+	  		salaries  = new Salaries();
+	        specialities = new Specialities(); 
+	       //  setTiedosto(nimi); 
+	        employees.lueTiedostosta(); 
+	        contracts.lueTiedostosta(); 
+	        salaries.lueTiedostosta();
+	        specialities.lueTiedostosta(); 
+	    } 
+
+		 
+	  /** 
+	     * Asettaa tiedostojen perusnimet 
+	     * @param nimi uusi nimi 
+	     */ 
+	  /*
+	     public void setTiedosto(String nimi) { 
+	        File dir = new File(nimi); 
+	        dir.mkdirs(); 
+	        String hakemistonNimi = ""; 
+	        if ( !nimi.isEmpty() ) hakemistonNimi = nimi ; 
+	        employees.setTiedostonPerusNimi(hakemistonNimi + "nimet"); 
+	        //harrastukset.setTiedostonPerusNimi(hakemistonNimi + "harrastukset"); 
+	    }
+*/
+	   
+	     
+	public static void main(String[] args) {
+		HumanResources humanresources = new HumanResources();
+		Employee aku1 = new Employee(), aku2 = new Employee();
+        aku1.rekisteroi();
+        aku1.vastaaAkuAnkka();
+        aku2.rekisteroi();
+        aku2.vastaaAkuAnkka();
+        
+        try {
+			humanresources.lisaa(aku1);
+		    humanresources.lisaa(aku2);
+			 
+		    //Speclities classes
+		    int id1 = aku1.getEmployeeNumber();
+		    int id2 = aku2.getEmployeeNumber();
+		    Speciality pitsi11 = new Speciality(id1); pitsi11.vastaaPitsinNyplays(id1); humanresources.lisaa(pitsi11);
+		    Speciality pitsi12 = new Speciality(id1); pitsi12.vastaaPitsinNyplays(id1); humanresources.lisaa(pitsi12);
+		    Speciality pitsi21 = new Speciality(id2); pitsi21.vastaaPitsinNyplays(id2); humanresources.lisaa(pitsi21);
+		    Speciality pitsi22 = new Speciality(id2); pitsi22.vastaaPitsinNyplays(id2); humanresources.lisaa(pitsi22);
+		    Speciality pitsi23 = new Speciality(id2); pitsi23.vastaaPitsinNyplays(id2); humanresources.lisaa(pitsi23);
+
+		} catch (SailoException e) {
+			 System.out.println("Error: "+e.getMessage());
+			 
+			 
+//			   System.out.println("============= Employees test =================");
+//			 for (int i = 0; i < humanresources.getEmployees(); i++) {
+//		           Employee employee = humanresources.annaEmployee(i);
+//		           System.out.println("Employee paikassa: " + i);
+//		           employee.tulosta(System.out);
+//		          
+//		           
+//		           //specialities class
+//		            List<Speciality> loytyneet = humanresources.annaSpecialities(employee);
+//			           for (Speciality speciality : loytyneet)
+//			               speciality.tulosta(System.out);
+//		       }
+
+		}
+       
+        
+        
+        System.out.println("============= Employees test =================");
+
+        for (int i = 0; i < humanresources.getEmployees(); i++) {
+        	Employee employee = humanresources.annaEmployee(i);
+            System.out.println("Employee place: " + i);
+            employee.tulosta(System.out);
+            
+            
+          //specialities class
+            List<Speciality> loytyneet = humanresources.annaSpecialities(employee);
+	           for (Speciality speciality : loytyneet)
+	               speciality.tulosta(System.out);
+        }        
+        
+}
+
+	
+	/**
+     * Luo uuden jäsenen jota aletaan editoimaan 
+     */
+    public Employee newEmployee() {
+       return employees.newEmployee();
+    }
+
+    
+	public Contract newContract() {
+		return contracts.newContract();	
+	} 
+     
+	
+	public Salary newSalary() {
+		return salaries.newSalary();	
+	} 
+	
+	
+//	public Speciality newSpeciality() {
+//		return specialities.newSpeciality();	
+//	} 
+}

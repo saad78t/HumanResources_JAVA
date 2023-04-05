@@ -1,0 +1,89 @@
+package humanresourcessalaries;
+
+import static humanresourcesemployee.EmployNumberChecking.arvoHetu;
+import static humanresourcesemployee.EmployNumberChecking.rand;
+
+import java.io.OutputStream;
+import java.io.PrintStream;
+
+
+public class Salary {
+private static int seuraavaNro    = 1;
+	
+    private int        EmployeeNumber;
+    private int        ContractNumber;
+    private int        Mainsalary ;
+    private int        Month;
+    private int        Year;
+    private int        Bounce;
+    private int        Loance;
+    private int        TransportaitionAllowance;
+    private int        NetSalary ;
+    
+    
+    public static void main(String[] args) {
+		Salary aku= new Salary();
+		Salary aku2= new Salary();
+		
+		aku.rekisteroi();
+		aku2.rekisteroi();
+		
+		aku.tulosta(System.out);
+		aku2.tulosta(System.out);
+		
+		aku.vastaaAkuAnkka();
+		aku2.vastaaAkuAnkka();
+		aku.tulosta(System.out);
+		aku2.tulosta(System.out);
+	}
+    
+    
+    public int rekisteroi() {
+		 if (EmployeeNumber!=0) return EmployeeNumber;
+		 EmployeeNumber = seuraavaNro;
+	        seuraavaNro++;
+	        return EmployeeNumber;
+	    }
+	 
+	 
+	 public int getEmployeeNumber() {
+	        return EmployeeNumber;
+	    }
+	 
+	 
+	 public void tulosta(PrintStream out) {
+	        out.println(String.format("%03d", EmployeeNumber, 3) + "  " + EmployeeNumber + "  "
+	                + ContractNumber+" "+   Mainsalary+" "+ Month);
+	        out.println("  " + Year + "  " + Bounce + " " + TransportaitionAllowance + " "+ NetSalary);
+	 }
+	        
+	        //why we need this method
+	   	 public void tulosta(OutputStream os) {
+	   	        tulosta(new PrintStream(os));
+	   	    }
+	   	 
+	   	 public void vastaaAkuAnkka(int EmployeeNumber) {
+             EmployeeNumber    = 1 + rand(1000,9999);
+             ContractNumber    = 32132131;
+             Mainsalary        = 1000;
+             Month             = 5;
+             Year              = 2018;
+             Bounce            = 20;
+             Loance            =100; 
+             TransportaitionAllowance     = 0;
+             NetSalary                    = 920;
+             
+  }
+
+		
+		
+ public String getEmployeeNumbers() {
+			return Integer.toString(EmployeeNumber);
+		}
+
+public void vastaaAkuAnkka() {
+	 int EmployeeNumber = arvoHetu();
+   vastaaAkuAnkka(EmployeeNumber);
+  }
+
+}

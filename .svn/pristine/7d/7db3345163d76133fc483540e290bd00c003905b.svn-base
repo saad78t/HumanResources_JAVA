@@ -1,0 +1,81 @@
+package humanresourcesemployee;
+
+import fi.jyu.mit.fxgui.Dialogs;
+import humanhesourcescontract.Contract;
+import humanhesourcescontract.Contracts;
+public class HumanResources {
+	
+private Employees employees = new Employees();
+private Contracts contracts= new Contracts();
+
+    //to show the number of employees
+	public int getEmployees() {
+        return employees.getLkm();
+    }
+	
+	
+	public int getContracts() {
+        return contracts.getLkm();
+	}
+	
+	
+	//return employees number
+	public Employee annaEmployee(int i) throws IndexOutOfBoundsException {
+	        return employees.anna(i);
+	}
+	 
+	 
+	public Contract annaContract(int i) throws IndexOutOfBoundsException {
+        return contracts.anna(i);
+}
+	
+	
+	  public void lisaa(Employee employee) throws SailoException {
+	        employees.lisaa(employee);
+	    }
+	  
+	  
+	  public void lisaa(Contract contract) throws SailoException {
+	        contracts.lisaa(contract);
+	    }
+	
+	public static void main(String[] args) {
+		HumanResources humanresources = new HumanResources();
+		Employee aku1 = new Employee(), aku2 = new Employee();
+        aku1.rekisteroi();
+        aku1.vastaaAkuAnkka();
+        aku2.rekisteroi();
+        aku2.vastaaAkuAnkka();
+      
+        try {
+			humanresources.lisaa(aku1);
+			 humanresources.lisaa(aku2);
+		} catch (SailoException e) {
+			 System.out.println("Error: "+e.getMessage());
+		}
+       
+        
+        
+        System.out.println("============= Employees test =================");
+
+        for (int i = 0; i < humanresources.getEmployees(); i++) {
+        	Employee employee = humanresources.annaEmployee(i);
+            System.out.println("Employee place: " + i);
+            employee.tulosta(System.out);
+        }        
+        
+}
+	
+	/**
+     * Luo uuden jäsenen jota aletaan editoimaan 
+     */
+    public Employee newEmployee() {
+       return employees.newEmployee();
+    }
+
+    
+	public Contract newContract() {
+		return contracts.newContract();	
+	} 
+     
+}

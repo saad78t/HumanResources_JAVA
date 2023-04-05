@@ -1,0 +1,39 @@
+=----------------------------------------
+= Ohjelmointi 2, 2017, vaihe 2
+=----------------------------------------
+= Katso <a href=".." target="_top">työ vaiheittain</a>
+=
+@https://svn.cc.jyu.fi/srv/svn/ohj2ht/k2019/HumanResource = Työ versionhallinnassa
+=
+= <h3>Ohjelman avustus</h3>
+!https://tim.jyu.fi/view/kurssit/tie/ohj2/2019k/ht/igsaturk = Suunnitelma + avustus TIMIssä
+=
+pictures/error.png = errorpage hd
+pictures/mainwindo.png = mainwindow hd
+pictures/contracts.png = contracts hd
+pictures/MainWindow.png = MainWindow hd
+pictures/Salaries.png = Salaries hd
+pictures/Oliokuva.png = Oliokuva hd
+
+= <h3>User interface JavaFX</h3>
+src/HumanResources/ContractsMain.java = for contracts 
+src/HumanResources/ContractsGUIView.fxml =for contracts
+src/HumanResources/ContractsGUIController.java = for contracts
+src/HumanResources/contracts.css = for contracts
+
+src/HumanResources/MainWindowMain.java = mainwindow
+src/HumanResources/MainWindowGUIView.fxml = mainwindow
+src/HumanResources/MainWindowGUIController.java = mainwindow
+src/HumanResources/mainwindow.css = mainwindow
+
+src/HumanResources/SalariesMain.java = Salaries
+src/HumanResources/SalariesGUIView.fxml = Salaries
+src/HumanResources/SalariesGUIController.java = Salaries
+src/HumanResources/salaries.css = Salaries
+
+
+= <h3>Other files</h3>
+build.xml = Ant-skripti joka tekee .jar:in
+.project = Eclipsen projekti
+.classpath = Eclipsen luokkapolku
+.settings/org.eclipse.jdt.core.prefs = Eclipsen kääntäjän varoitukset

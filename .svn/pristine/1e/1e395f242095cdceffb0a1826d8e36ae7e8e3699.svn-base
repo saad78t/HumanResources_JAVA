@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import fi.jyu.mit.fxgui.ListChooser?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HumanResources.MainWindowGUIController">
+   <bottom>
+      <HBox prefHeight="76.0" prefWidth="593.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button cache="true" onAction="#handleSave" text="Save">
+               <tooltip>
+                  <Tooltip text="Save File" />
+               </tooltip></Button>
+            <Button onAction="#handleDelete" text="Delete">
+               <tooltip>
+                  <Tooltip text="Remove File" />
+               </tooltip></Button>
+            <Button onAction="#handleEdit" text="Edit">
+               <tooltip>
+                  <Tooltip text="Modify file" />
+               </tooltip></Button>
+            <Button onAction="#handleNew" text="New">
+               <tooltip>
+                  <Tooltip text="New File" />
+               </tooltip></Button>
+            <Button mnemonicParsing="false" onAction="#handleNext" text="Next" />
+            <Button mnemonicParsing="false" onAction="#handleBack" text="Back" />
+            <Button mnemonicParsing="false" onAction="#handleLast" text="Last" />
+            <Button mnemonicParsing="false" onAction="#handleFirst" text="First" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </HBox>
+   </bottom>
+   <top>
+      <MenuBar prefHeight="22.0" prefWidth="593.0" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleNew" text="New">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#handleDelete" text="Delete" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Exit" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Samples">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Login" />
+                  <MenuItem fx:id="SalariesField" mnemonicParsing="false" onAction="#handleSalaries" text="Salaries" />
+                  <MenuItem fx:id="ContractsField" mnemonicParsing="false" onAction="#handleContracts" text="Contracts" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <left>
+      <BorderPane BorderPane.alignment="CENTER">
+         <center>
+            <ListChooser fx:id="chooserEmployees" maxWidth="200.0" prefHeight="200.0" prefWidth="170.0" rivit="Anna&#10;Hannu&#10;Saad &#10;Rafid&#10;" BorderPane.alignment="CENTER" />
+         </center>
+         <top>
+            <GridPane BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.99999237060547" minWidth="10.0" prefWidth="139.99999237060547" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.0" minWidth="10.0" prefWidth="60.00000762939453" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button mnemonicParsing="false" onAction="#handleSearch" text="Search" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+                  <TextField>
+                     <GridPane.margin>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </GridPane.margin>
+                  </TextField>
+                  <Label text="All Employees" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </GridPane>
+         </top>
+      </BorderPane>
+   </left>
+   <center>
+      <ScrollPane fx:id="panelEmployee" fitToWidth="true" BorderPane.alignment="CENTER">
+         <content>
+            <GridPane alignment="CENTER_RIGHT" hgap="10.0" prefHeight="453.0" prefWidth="378.0">
+              <columnConstraints>
+                <ColumnConstraints fillWidth="false" halignment="RIGHT" hgrow="NEVER" minWidth="10.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Employee's Number" />
+                  <Label text="First Name" GridPane.rowIndex="1" />
+                  <TextField text="1" GridPane.columnIndex="1" />
+                  <TextField text="Anna" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Surname" GridPane.rowIndex="2" />
+                  <Label text="Nationality" GridPane.rowIndex="3" />
+                  <Label text="Date of Birth" GridPane.rowIndex="4" />
+                  <Label text="Phone Number" GridPane.rowIndex="5" />
+                  <Label text="Speciality" GridPane.rowIndex="6" />
+                  <Label text="Address" GridPane.rowIndex="7" />
+                  <Label text="Postal code" GridPane.rowIndex="8" />
+                  <Label text="postal  address" GridPane.rowIndex="9" />
+                  <Label text="Hour Realization" GridPane.rowIndex="10" />
+                  <Label text="Salary" GridPane.rowIndex="11" />
+                  <TextField text="Aku" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField text="Finnish" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField text="1.7.1950" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField text="12-123245" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField text="Engineer" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField text="Ankkakuja 6" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <TextField text="12345" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <TextField text="ANKKALINNA" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                  <TextField text="-----" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                  <TextField text="200" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </GridPane>
+         </content>
+      </ScrollPane>
+   </center>
+</BorderPane>

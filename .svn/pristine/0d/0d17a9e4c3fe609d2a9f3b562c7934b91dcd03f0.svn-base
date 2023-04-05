@@ -1,0 +1,76 @@
+package humanhesourcescontract;
+
+import fi.jyu.mit.fxgui.Dialogs;
+import humanresourcesemployee.SailoException;
+
+public class Contracts {
+	private static final int MAX_Contracts   = 5;
+    private int              lkm           = 0;
+    
+    private Contract[] objects= new Contract[MAX_Contracts];
+    
+    public Contracts() {
+    	//
+    }
+    
+    public void lisaa(Contract contract)  throws SailoException {
+        if (lkm >= objects.length) throw new SailoException("Liikaa alkioita");
+        this.objects[lkm] = contract;
+        lkm++;
+    }
+    
+    
+    public Contract anna(int i) throws IndexOutOfBoundsException {
+        if (i < 0 || lkm <= i)
+            throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
+        return objects[i];
+    }
+    
+    
+    public int getLkm() {
+        return this.lkm;
+    }
+    
+    
+    public Contract newContract() {
+	    Contract neww = new Contract();
+	    neww.rekisteroi();
+	    neww.vastaaAkuAnkka();
+	    try {
+	        lisaa(neww);
+	          return neww;
+	    } catch (SailoException e) {
+	        Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
+	      
+	    }
+	    //hae(neww.getEmployeeNumber());
+	    return null;
+}
+    
+    
+    public static void main(String[] args)  {
+		Contracts contracts = new Contracts();
+		
+		Contract aku= new Contract();
+		Contract aku2= new Contract();
+		
+		aku.rekisteroi();
+		aku.vastaaAkuAnkka();
+		aku2.rekisteroi();
+		aku2.vastaaAkuAnkka();
+		
+		  try {
+		contracts.lisaa(aku);
+		contracts.lisaa(aku2);
+		
+		  } catch (SailoException ex) {
+	            System.out.println(ex.getMessage());
+	        }
+		  System.out.println("============= Contracts test =================");
+		  for (int i = 0; i < contracts.getLkm(); i++) {
+              Contract contract = contracts.anna(i);
+              System.out.println("Employee nro: " + i);
+              contract.tulosta(System.out);
+          }
+	}
+}

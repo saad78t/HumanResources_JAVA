@@ -1,0 +1,77 @@
+package humanresourcessalaries;
+
+import fi.jyu.mit.fxgui.Dialogs;
+import humanresourcesemployee.SailoException;
+
+public class Salaries {
+
+	private static final int MAX_Salaries   = 5;
+    private int              lkm           = 0;
+    
+    private Salary[] objects= new Salary[MAX_Salaries];
+    
+    public Salaries() {
+    	//
+    }
+    
+    
+    public void lisaa(Salary salary)  throws SailoException {
+        if (lkm >= objects.length) throw new SailoException("Liikaa alkioita");
+        this.objects[lkm] = salary;
+        lkm++;
+    }
+    
+    
+    public Salary anna(int i) throws IndexOutOfBoundsException {
+        if (i < 0 || lkm <= i)
+            throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
+        return objects[i];
+    }
+    
+    
+    public int getLkm() {
+        return this.lkm;
+    }
+    
+    
+    public Salary newSalary() {
+	    Salary neww = new Salary();
+	    neww.rekisteroi();
+	    neww.vastaaAkuAnkka();
+	    try {
+	        lisaa(neww);
+	          return neww;
+	    } catch (SailoException e) {
+	        Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
+	      
+	    }
+	    //hae(neww.getEmployeeNumber());
+	    return null;
+}
+    
+	public static void main(String[] args) {
+		Salaries salaries = new Salaries();
+		
+		Salary aku= new Salary();
+		Salary aku2= new Salary();
+		
+		aku.rekisteroi();
+		aku.vastaaAkuAnkka();
+		aku2.rekisteroi();
+		aku2.vastaaAkuAnkka();
+		
+		  try {
+		salaries.lisaa(aku);
+		salaries.lisaa(aku2);
+		
+		  } catch (SailoException ex) {
+	            System.out.println(ex.getMessage());
+	        }
+		  System.out.println("============= Salaries test =================");
+		  for (int i = 0; i < salaries.getLkm(); i++) {
+              Salary salary = salaries.anna(i);
+              System.out.println("Employee nro: " + i);
+              salary.tulosta(System.out);
+          }
+	}
+}

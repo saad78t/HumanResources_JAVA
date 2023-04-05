@@ -1,0 +1,75 @@
+package humanresourcesemployee;
+
+import fi.jyu.mit.fxgui.Dialogs;
+
+public class Employees {
+	
+	private static final int MAX_EMPLOYEES   = 5;
+    private int              lkm           = 0;
+    //private String           fileName = "";
+    private Employee []         objects = new Employee[MAX_EMPLOYEES];
+    
+    
+    public Employees() {
+    	//
+    }
+    
+   
+    public void lisaa(Employee employee)  throws SailoException {
+        if (lkm >= objects.length) throw new SailoException("Liikaa alkioita");
+        this.objects[lkm] = employee;
+        lkm++;
+    }
+    
+    
+    public Employee anna(int i) throws IndexOutOfBoundsException {
+        if (i < 0 || lkm <= i)
+            throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
+        return objects[i];
+    }
+    
+    
+    public int getLkm() {
+        return this.lkm;
+    }
+    
+	public Employee newEmployee() {
+	    Employee neww = new Employee();
+	    neww.rekisteroi();
+	    neww.vastaaAkuAnkka();
+	    try {
+	        lisaa(neww);
+	          return neww;
+	    } catch (SailoException e) {
+	        Dialogs.showMessageDialog("Ongelmia uuden luomisessa " + e.getMessage());
+	      
+	    }
+	    //hae(neww.getEmployeeNumber());
+	    return null;
+}
+	public static void main(String[] args)  {
+		Employees employees = new Employees();
+		
+		Employee aku= new Employee();
+		Employee aku2= new Employee();
+		
+		aku.rekisteroi();
+		aku.vastaaAkuAnkka();
+		aku2.rekisteroi();
+		aku2.vastaaAkuAnkka();
+		
+		  try {
+		employees.lisaa(aku);
+		employees.lisaa(aku2);
+		
+		  } catch (SailoException ex) {
+	            System.out.println(ex.getMessage());
+	        }
+		  System.out.println("============= Employees test =================");
+		  for (int i = 0; i < employees.getLkm(); i++) {
+              Employee employee = employees.anna(i);
+              System.out.println("Employee nro: " + i);
+              employee.tulosta(System.out);
+          }
+	}
+}

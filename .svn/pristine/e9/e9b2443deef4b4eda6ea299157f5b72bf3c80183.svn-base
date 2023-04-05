@@ -1,0 +1,10 @@
+package HumanResources;
+
+/**
+ * @author Omistaja
+ * @version 31.1.2019
+ *
+ */
+public class ContractsGUIController {
+      // TODO
+}

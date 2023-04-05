@@ -1,0 +1,51 @@
+package HumanResources;
+
+import javafx.event.ActionEvent;
+import humanresourcesemployee.*;
+import HumanResources.*;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javax.security.auth.spi.LoginModule;
+
+import fi.jyu.mit.fxgui.ModalController;
+import humanresourcesemployee.HumanResources;
+/**
+ * @author Omistaja
+ * @version 9.2.2019
+ *
+ */
+public class LoginPageGUIController implements Initializable {
+  
+	   @FXML void handleLogin(ActionEvent event) throws IOException{
+			System.out.println("you clicked me");
+			HumanResources humanresources = new HumanResources();
+//			Parent main_window= FXMLLoader.load (getClass().getResource("MainWindowGUIView.fxml"));
+			ModalController.showModal(MainWindowGUIController.class.getResource("MainWindowGUIView.fxml"), "Personal Information", null, humanresources);
+//			Scene scene = new Scene(main_window);
+			Stage app = (Stage) ((Node) event.getSource()).getScene().getWindow();
+			app.hide();
+//			app.setScene(scene);
+			app.show();	    
+ }
+	  
+	   @FXML
+	    void handleCancel(ActionEvent event) {
+
+	    }
+	   
+	   
+	   @Override
+	   public void initialize(URL url, ResourceBundle rb) {
+		   //ToDo
+	   }
+}

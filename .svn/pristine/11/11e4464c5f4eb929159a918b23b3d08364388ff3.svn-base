@@ -1,0 +1,121 @@
+
+package humanresourcesemployee;
+import static humanresourcesemployee.EmployNumberChecking.*;
+
+import java.io.OutputStream;
+import java.io.PrintStream;
+
+/**
+ * @author Omistaja
+ *
+ */
+public class Employee {
+
+	//private int tunnusNro;
+    private static int seuraavaNro    = 1;
+    
+    private int        EmployeeNumber ;
+    private String     FirstName      = "";
+    private String     Surname        = "";
+    private String     Nationality    ="";
+    private String     DateofBirth    = "";
+    private String     speciality     = "";
+    private String     Address        = "";
+    private String     PostCode       = "";
+    private String     PostalAddress  = "";
+    private int        Hourrealization = 0;
+    private int        PhoneNumber    = 0;
+    private double     Salary         = 0;
+   
+	  public static void main(String[] args) {
+		Employee aku= new Employee();
+		Employee aku2= new Employee();
+		
+		aku.rekisteroi();
+		aku2.rekisteroi();
+		
+		aku.tulosta(System.out);
+		aku2.tulosta(System.out);
+		
+		aku.vastaaAkuAnkka();
+		aku2.vastaaAkuAnkka();
+		aku.tulosta(System.out);
+		aku2.tulosta(System.out);
+		
+	}
+	
+	
+	/**
+     * Antaa jäsenelle seuraavan rekisterinumeron.
+     * @return jäsenen uusi tunnusNro
+     * @example
+     * <pre name="test">
+     *   Employee aku1 = new Employee();
+     *   aku1.getTunnusNro() === 0;
+     *   aku1.rekisteroi();
+     *   aku1.rekisteroi();
+     *   aku1.rekisteroi();
+     *   Employee aku2 = new Employee();
+     *   aku2.rekisteroi();
+     *   aku2.rekisteroi();
+     *   int n1 = aku1.getTunnusNro();
+     *   int n2 = aku2.getTunnusNro();
+     *   n1 === n2-1;
+     * </pre>
+     */
+	 public int rekisteroi() {
+		 if (EmployeeNumber!=0) return EmployeeNumber;
+		 EmployeeNumber = seuraavaNro;
+	        seuraavaNro++;
+	        return EmployeeNumber;
+	    }
+
+	 
+	 public int getEmployeeNumber() {
+	        return EmployeeNumber;
+	    }
+
+	 
+	 //tulosta = results
+	 public void tulosta(PrintStream out) {
+	        out.println(String.format("%03d", EmployeeNumber, 3) + "  " + EmployeeNumber + "  "
+	                + FirstName+" "+ Surname+" "+ Nationality);
+	        out.println("  " + DateofBirth + "  " + speciality + " " + Address);
+	        out.println("  " + PostCode + "  " +PostalAddress+ " " + Hourrealization+
+	        		 " "+" W:" + PhoneNumber+"  "+  Salary +" e." );
+	 }
+	 
+	 //why we need this method
+	 public void tulosta(OutputStream os) {
+	        tulosta(new PrintStream(os));
+	    }
+	 
+	 //why depended on String type to distinguish between similar names?
+	 public void vastaaAkuAnkka(int EmployeeNumber) {
+	               EmployeeNumber = 0 + rand(1000,9999);
+	               FirstName      = "Ankka";
+	               Surname        = "Aku";
+	               Nationality    ="Finnish";
+	               DateofBirth    = "1.7.1950";
+	               PhoneNumber    = 12-123245;
+	               speciality     = "Engineer";
+	               Address        = "Ankkakuja 6";
+	               PostCode       = "12345";
+	               PostalAddress  = "ANKKALINNA";
+	               Hourrealization = 0;	             
+	               Salary         = 200;
+	    }
+
+
+	public String getName() {
+		return FirstName;
+		
+	}
+	 
+	 
+	  public void vastaaAkuAnkka() { //arvoHetu=Id number
+		 int EmployeeNumber = arvoHetu();
+	     vastaaAkuAnkka(EmployeeNumber);
+	    }
+	
+}

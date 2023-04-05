@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane prefHeight="426.0" prefWidth="276.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HumanResources.EmployeeDialogeController">
+   <bottom>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#handleOk" text="Ok" />
+            <Button alignment="BOTTOM_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <ScrollPane fx:id="panelEmployee" prefHeight="200.0" prefWidth="269.0" BorderPane.alignment="CENTER">
+         <content>
+            <GridPane fx:id="gridEmployee" alignment="CENTER" hgap="10.0" prefWidth="250.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label />
+                  <Label text="Employee's Number" />
+                  <TextField fx:id="editEmployeeNumber" editable="false" GridPane.columnIndex="1" />
+                  <Label text="First Name" GridPane.rowIndex="1" />
+                  <TextField fx:id="editName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Surname" GridPane.rowIndex="2" />
+                  <Label text="Nationality" GridPane.rowIndex="3" />
+                  <Label text="Date of Birth" GridPane.rowIndex="4" />
+                  <Label text="Phone Number" GridPane.rowIndex="5" />
+                  <Label text="Speciality" GridPane.rowIndex="6" />
+                  <Label text="Address" GridPane.rowIndex="7" />
+                  <Label text="Postal Code" GridPane.rowIndex="8" />
+                  <Label text="Postal address" GridPane.rowIndex="9" />
+                  <Label text="Hour Realization" GridPane.rowIndex="10" />
+                  <Label text="Salary" GridPane.rowIndex="11" />
+                  <TextField fx:id="editSurName" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="editNationality" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="editDateofBirth" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="editPhoneNumber" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TextField fx:id="editSpeciality" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="editAddress" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <TextField fx:id="editPostalCode" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                  <TextField fx:id="editPostalAddress" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                  <TextField fx:id="editHourRealization" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                  <TextField fx:id="editSalary" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+               </children>
+               <padding>
+                  <Insets left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </GridPane>
+         </content>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </ScrollPane>
+   </center>
+   <top>
+      <Label fx:id="labelVirhe" alignment="CENTER" prefHeight="17.0" prefWidth="279.0" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+   </top>
+</BorderPane>

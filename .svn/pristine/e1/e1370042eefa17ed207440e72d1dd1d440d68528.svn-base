@@ -1,0 +1,203 @@
+package humanresourcesemployee;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Arrays;
+
+import fi.jyu.mit.fxgui.Dialogs;
+
+public class Employees {
+	
+	private static final int MAX_EMPLOYEES   = 5;
+    private int              lkm           = 0;
+    //private String           fileName = "";
+    private Employee []         objects = new Employee[MAX_EMPLOYEES]; 
+    //private String kokoNimi = ""; 
+    private String tiedostonPerusNimi = "nimet"; 
+    private boolean muutettu = false; 
+    
+    public Employees() {
+    	//
+    }
+    
+   
+    public void lisaa(Employee employee)   {
+        if (lkm >= objects.length)  {
+          objects = Arrays.copyOf(objects, objects.length+10);
+        }      
+        objects[lkm++] = employee;
+//        this.objects[lkm] = employee;
+//lkm++;
+    }
+    
+   
+    public Employee anna(int i) throws IndexOutOfBoundsException {
+       if (i < 0 || lkm <= i)
+         throw new IndexOutOfBoundsException("Laiton indeksi: " + i);
+        return objects[i];
+    }
+    
+    
+    public int getLkm() {
+        return this.lkm;
+    }
+    
+
+	public Employee newEmployee() {
+	    Employee neww = new Employee();
+	    neww.rekisteroi();
+	    neww.vastaaAkuAnkka();
+	   // try {
+	        lisaa(neww);
+	          return neww;
+	    //} catch (SailoException e) {
+	       // Dialogs.showMessageDialog("Problems creating a new one " + e.getMessage());
+	      
+	   // }
+	    //hae(neww.getEmployeeNumber());
+	    //return null;
+}
+	
+	
+	public void korvaaTaiLisaa(Employee employee) throws SailoException {
+		 int id = employee.getEmployeeNumber();
+		 for(int i =0; i<lkm; i++) {
+			 if(objects[i].getEmployeeNumber()==id) {
+				 objects[i]= employee;
+				 muutettu=true;
+				 return;
+			 }
+		 }
+		 lisaa(employee);
+	  }
+	
+	
+	public static void main(String[] args)  {
+		Employees employees = new Employees();
+		
+		Employee aku= new Employee();
+		Employee aku2= new Employee();
+		
+		aku.rekisteroi();
+		aku.vastaaAkuAnkka();
+		aku2.rekisteroi();
+		aku2.vastaaAkuAnkka();
+		
+		 
+		employees.lisaa(aku);
+		employees.lisaa(aku2);
+		
+		  
+	        
+		  System.out.println("============= Employees test =================");
+		  for (int i = 0; i < employees.getLkm(); i++) {
+              Employee employee = employees.anna(i);
+              System.out.println("Employee nro: " + i);
+              employee.tulosta(System.out);
+          }
+	}
+	
+	
+	/** 
+	  * Palauttaa varakopiotiedoston nimen 
+	  * @return varakopiotiedoston nimi 	
+	  */   
+	    public String getBakNimi() { 
+	        return tiedostonPerusNimi + ".bak"; 
+	    } 
+	 
+
+	 
+	
+	   public void tallenna() throws SailoException { 
+//	        if ( !muutettu ) return; 
+	        File fbak = new File(getBakNimi()); 
+	        File ftied = new File(getTiedostonNimi()); 
+	        fbak.delete(); // if .. System.err.println("Ei voi tuhota"); 
+	        ftied.renameTo(fbak); // if .. System.err.println("Ei voi nimetä"); 
+	        try ( PrintWriter fo = new PrintWriter(new FileWriter(ftied.getCanonicalPath())) ) { 
+	           // fo.println(getKokoNimi()); 
+	            fo.println(objects.length); 
+	            for (Employee employee : objects) { 
+	            	if (employee != null)
+	                fo.println(employee.toString()); 
+	            } 
+	            //} catch ( IOException e ) { // ei heitä poikkeusta 
+	            //  throw new SailoException("Tallettamisessa ongelmia: " + e.getMessage()); 
+	        } catch ( FileNotFoundException ex ) { 
+	            throw new SailoException("Tiedosto " + ftied.getName() + " ei aukea"); 
+	        } catch ( IOException ex ) { 
+	            throw new SailoException("Tiedoston " + ftied.getName() + " kirjoittamisessa ongelmia"); 
+	        } 
+	        muutettu = false; 
+	    }
+
+	   
+	public String getTiedostonNimi() { 
+		        return getTiedostonPerusNimi() + ".dat"; 
+		    } 
+	
+	
+    public String getTiedostonPerusNimi() {
+        return tiedostonPerusNimi;
+    }
+
+    
+    public void setTiedostonPerusNimi(String nimi) { 
+        tiedostonPerusNimi = nimi; 
+    }
+
+    
+	public void lueTiedostosta(String tied) throws SailoException { 
+		 
+        setTiedostonPerusNimi(tied); 
+ 
+        try ( BufferedReader fi = new BufferedReader(new FileReader(getTiedostonNimi())) ) { 
+ 
+            //kokoNimi = fi.readLine(); 
+ 
+            //if ( kokoNimi == null ) throw new SailoException("Kerhon nimi puuttuu"); 
+ 
+            String rivi = fi.readLine(); 
+ 
+            if ( rivi == null ) throw new SailoException("Maksimikoko puuttuu"); 
+ 
+            // int maxKoko = Mjonot.erotaInt(rivi,10); // tehdään jotakin 
+ 
+            while ( (rivi = fi.readLine()) != null ) { 
+                rivi = rivi.trim(); 
+ 
+                if ( "".equals(rivi) || rivi.charAt(0) == ';' ) continue;  
+                Employee employee = new Employee(); 
+                employee.parse(rivi); // voisi olla virhekäsittely 
+                lisaa(employee);
+            } 
+            muutettu = false; 
+        } catch ( FileNotFoundException e ) { 
+            throw new SailoException("Tiedosto " + getTiedostonNimi() + " ei aukea"); 
+ 
+        } catch ( IOException e ) { 
+            throw new SailoException("Ongelmia tiedoston kanssa: " + e.getMessage()); 
+        } 
+    }  
+	
+	
+    public void lueTiedostosta() throws SailoException { 
+        lueTiedostosta(getTiedostonPerusNimi()); 
+     }
+
+    
+    /** 
+         * Palauttaa Kerhon koko nimen 
+         * @return Kerhon koko nimi merkkijononna 
+         */ 
+      //  public String getKokoNimi() { 
+      // return kokoNimi; 
+      //  } 
+    
+}
